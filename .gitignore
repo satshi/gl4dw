@@ -1,0 +1,12 @@
+build/
+build-*/
+build-vcpkg/
+vcpkg_installed/
+CMakeFiles/
+CMakeCache.txt
+*.log
+*.obj
+*.lib
+*.exe
+*.pdb
+*.ilk
