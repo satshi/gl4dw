@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------
- *	‘½–E‘ÌƒNƒ‰ƒX‚ÌŠÖ”
+ *	å¤šèƒä½“ã‚¯ãƒ©ã‚¹ã®é–¢æ•°
  * ---------------------------------------------------------------------- */
 #include "polytope.h"
 #include "dirutil.h"
@@ -12,12 +12,6 @@
 
 polytope::~polytope()
 {
-	delete vertices;		delete edges;
-	delete faces;			delete Facets;
-	delete Facets_to_faces;	delete Facets_to_edges;
-	delete faces_to_edges;	delete flag_Facets;
-	delete flag_faces;		delete flag_edges;
-	delete flag_vertices;
 }
 
 polytope* polytope::slice(const aVector4& e, double b)
@@ -39,7 +33,7 @@ polytope* polytope::slice(const aVector4& e, double b)
 
 		if(f_v[i0] ^ f_v[i1])
 		{
-			//—Å‚ÆØ’f–Ê‚Æ‚ÌŒğ“_‚ğ‹‚ß‚éB
+			//ç¨œã¨åˆ‡æ–­é¢ã¨ã®äº¤ç‚¹ã‚’æ±‚ã‚ã‚‹ã€‚
 			Vector4& v0=(*vertices)[i0];
 			Vector4& v1=(*vertices)[i1];
 			double d0=v0*e[3]-b;
@@ -52,16 +46,16 @@ polytope* polytope::slice(const aVector4& e, double b)
 		else ix_e[i]=NONSENCE_INDEX;
 	}
 		polytope* ret=new polytope();
-		ret->vertices=new points(new_v);
-		//Ø‚èŒû‚Ì–E‚ğİ’è‚·‚éB
-		ret->Facets=new cells(1);
+		ret->vertices.reset(new points(new_v));
+		//åˆ‡ã‚Šå£ã®èƒã‚’è¨­å®šã™ã‚‹ã€‚
+		ret->Facets.reset(new cells(1));
 		(*(ret->Facets))[0].renew(new_v.n);
 		for(i=0;i<ret->Facets->n;i++)(*(ret->Facets))[0][i]=i;
 
-		ret->Facet_nomals=new points(1);
+		ret->Facet_nomals.reset(new points(1));
 		(*(ret->Facet_nomals))[0]=e[3];
 
-	if(faces)//–Ê‚Ìƒf[ƒ^‚ª‚ ‚ê‚Î—Å‚Ìƒf[ƒ^‚ğì‚éB
+	if(faces)//é¢ã®ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Œã°ç¨œã®ãƒ‡ãƒ¼ã‚¿ã‚’ä½œã‚‹ã€‚
 	{
 		if(!faces_to_edges)make__faces_to_edges();
 		cells new_e(faces->n);
@@ -89,10 +83,10 @@ polytope* polytope::slice(const aVector4& e, double b)
 			}
 		  next_face: ;
 		}
-		ret->edges=new cells(new_e);
+		ret->edges.reset(new cells(new_e));
 	}
 
-	if(Facets)//–E‚Ìƒf[ƒ^‚ª‚ ‚ê‚Î–Ê‚Ìƒf[ƒ^‚ğì‚éB
+	if(Facets)//èƒã®ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Œã°é¢ã®ãƒ‡ãƒ¼ã‚¿ã‚’ä½œã‚‹ã€‚
 	{
 		if(!Facets_to_edges)make__Facets_to_edges();
 		cells new_f(Facets->n);
@@ -118,7 +112,7 @@ polytope* polytope::slice(const aVector4& e, double b)
 				new_f.n++;
 			}
 		}
-		ret->faces=new cells(new_f);
+		ret->faces.reset(new cells(new_f));
 	}
 	return ret;
 }
@@ -142,7 +136,7 @@ polytope* polytope::cut(const aVector4& e, double b, BOOL include_slice)
 
 		if(f_v[i0] ^ f_v[i1])
 		{
-			//—Å‚ÆØ’f–Ê‚Æ‚ÌŒğ“_‚ğ‹‚ß‚éB
+			//ç¨œã¨åˆ‡æ–­é¢ã¨ã®äº¤ç‚¹ã‚’æ±‚ã‚ã‚‹ã€‚
 			Vector4& v0=(*vertices)[i0];
 			Vector4& v1=(*vertices)[i1];
 			double d0=v0*e[3]-b;
@@ -157,7 +151,7 @@ polytope* polytope::cut(const aVector4& e, double b, BOOL include_slice)
 	//int origin=new_v.n;
 	polytope* ret=new polytope();
 
-	//’¸“_‚ğİ’è‚·‚é
+	//é ‚ç‚¹ã‚’è¨­å®šã™ã‚‹
 	for(i=0;i<vertices->n;i++)
 	{
 		if(f_v[i])
@@ -168,18 +162,18 @@ polytope* polytope::cut(const aVector4& e, double b, BOOL include_slice)
 		}
 		else ix_v[i]=NONSENCE_INDEX;
 	}
-	ret->vertices=new points(new_v);
+	ret->vertices.reset(new points(new_v));
 
-	//Ø‚èŒû‚Ì–E‚ğİ’è‚·‚éB
-/*	ret->Facets=new cells(1);
+	//åˆ‡ã‚Šå£ã®èƒã‚’è¨­å®šã™ã‚‹ã€‚
+/*	ret->Facets.reset(new cells(1));
 	(*Facets)[0].renew(new_v.n);
 	for(i=0;i<Facets->n;i++)(*Facets)[0][i]=i;
 */
 
-	Facet_nomals=new points(1);
-	(*Facet_nomals)[0]=e[3];
+	ret->Facet_nomals.reset(new points(1));
+	(*(ret->Facet_nomals))[0]=e[3];
 
-	if(faces)//–Ê‚Ìƒf[ƒ^‚ª‚ ‚ê‚Î—Å‚Ìƒf[ƒ^‚ğì‚éB
+	if(faces)//é¢ã®ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Œã°ç¨œã®ãƒ‡ãƒ¼ã‚¿ã‚’ä½œã‚‹ã€‚
 	{
 		if(!faces_to_edges)make__faces_to_edges();
 		cells new_e(faces->n+edges->n);
@@ -233,9 +227,9 @@ polytope* polytope::cut(const aVector4& e, double b, BOOL include_slice)
 				new_e.n++;
 			}
 		}
-		ret->edges=new cells(new_e);
+		ret->edges.reset(new cells(new_e));
 
-		if(Facets)//–E‚Ìƒf[ƒ^‚ª‚ ‚ê‚Î–Ê‚Ìƒf[ƒ^‚ğì‚éB
+		if(Facets)//èƒã®ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Œã°é¢ã®ãƒ‡ãƒ¼ã‚¿ã‚’ä½œã‚‹ã€‚
 		{
 			if(!Facets_to_edges)make__Facets_to_edges();
 			cells new_f(Facets->n+faces->n);
@@ -262,7 +256,7 @@ polytope* polytope::cut(const aVector4& e, double b, BOOL include_slice)
 					new_f.n++;
 				}
 			}
-			ret->faces=new cells(new_f);
+			ret->faces.reset(new cells(new_f));
 		}
 	}
 	return ret;
@@ -295,12 +289,12 @@ BOOL polytope::make_faces_from_Facets()
 	cerr<<"making faces\n";
 	for(i=0; i<Facets->n-1;i++)
 	{
-		// ƒƒbƒZ[ƒWˆ—Aƒp[ƒZƒ“ƒg•\¦
+		// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç†ã€ãƒ‘ãƒ¼ã‚»ãƒ³ãƒˆè¡¨ç¤º
 		if((i%100)==0)
 		{
 			if(tfaces.interupt(i*100/Facets->n))return FALSE;
 		}
-		// ‚±‚±‚Ü‚Å
+		// ã“ã“ã¾ã§
 		cell& c1=(*Facets)[i];
 		for(j=0;j<c1.n;j++)hash[c1[j]]=1;
 
@@ -318,7 +312,7 @@ BOOL polytope::make_faces_from_Facets()
 				}
 			}
 			
-			if(buf.n>=3)  //ŠÜ‚Ü‚ê‚é’¸“_‚ÌŒÂ”‚ª‚RˆÈã‚È‚ç–Ê‚Å‚ ‚é
+			if(buf.n>=3)  //å«ã¾ã‚Œã‚‹é ‚ç‚¹ã®å€‹æ•°ãŒï¼“ä»¥ä¸Šãªã‚‰é¢ã§ã‚ã‚‹
 			{
 				if(!(tfaces.n%50))cerr<<"face "<<tfaces.n<<endl;
 				tfaces[tfaces.n]=buf;
@@ -330,8 +324,7 @@ BOOL polytope::make_faces_from_Facets()
 
 	delete[] hash;
 	
-	delete faces;
-	faces=new cells(tfaces);
+	faces.reset(new cells(tfaces));
 	cerr<<"making edges\n";
 	if(!make_edges_from_Facets_and_faces())return FALSE;
 	cerr<<"sorting\n";
@@ -365,12 +358,12 @@ BOOL polytope::make_edges_from_Facets_and_faces()
 
 	for(i=0; i<Facets->n-1;i++)
 	{
-		// ƒƒbƒZ[ƒWˆ—Aƒp[ƒZƒ“ƒg•\¦
+		// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç†ã€ãƒ‘ãƒ¼ã‚»ãƒ³ãƒˆè¡¨ç¤º
 		if((i%100)==0)
 		{
 			if(tedges.interupt(i*100/Facets->n))return FALSE;
 		}
-		// ‚±‚±‚Ü‚Å
+		// ã“ã“ã¾ã§
 		cell& c1=(*Facets)[i];
 		for(j=0;j<c1.n;j++)hash[c1[j]]=1;
 		
@@ -388,7 +381,7 @@ BOOL polytope::make_edges_from_Facets_and_faces()
 				}
 			}
 
-			if(buf.n==2)  //ŠÜ‚Ü‚ê‚é’¸“_‚ÌŒÂ”‚ª‚Q‚È‚ç—Å‚Å‚ ‚é
+			if(buf.n==2)  //å«ã¾ã‚Œã‚‹é ‚ç‚¹ã®å€‹æ•°ãŒï¼’ãªã‚‰ç¨œã§ã‚ã‚‹
 			{
 				if(!(tedges.n%50))cerr<<"edge "<<tedges.n<<endl;
 				tedges[tedges.n]=buf;
@@ -399,7 +392,7 @@ BOOL polytope::make_edges_from_Facets_and_faces()
 	}
 	
 	delete[] hash;
-	//d•¡‚ğ‰ğÁ‚·‚é
+	//é‡è¤‡ã‚’è§£æ¶ˆã™ã‚‹
 	INDEX m=1;
 	for(i=1;i<tedges.n;i++)
 	{
@@ -407,7 +400,7 @@ BOOL polytope::make_edges_from_Facets_and_faces()
 		{
 			if((tedges[i][0]==tedges[j][0] && tedges[i][1]==tedges[j][1])
 			  ||  (tedges[i][0]==tedges[j][1] && tedges[i][1]==tedges[j][0]))
-			  {goto loop1;}//(*edges)[i]‚Æ(*edges)[j]‚ª“¯‚¶‚È‚çŸ‚Ö
+			  {goto loop1;}//(*edges)[i]ã¨(*edges)[j]ãŒåŒã˜ãªã‚‰æ¬¡ã¸
 		}
 		tedges[m]=tedges[i];
 		m++;
@@ -415,13 +408,12 @@ BOOL polytope::make_edges_from_Facets_and_faces()
 		loop1:;
 	}
 	tedges.n=m;
-	delete edges;
-	edges=new cells(tedges);
+	edges.reset(new cells(tedges));
 	return TRUE;
 }
 
 /* -------------------------------------------------------------------------
- *	’¸“_‚Ìƒf[ƒ^‚È‚Ç‚Ìå‚Èƒf[ƒ^‚ğ“Ç‚İ‚Ş
+ *	é ‚ç‚¹ã®ãƒ‡ãƒ¼ã‚¿ãªã©ã®ä¸»ãªãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€
  * ---------------------------------------------------------------------- */
 void polytope::load_base(char* fname)
 {
@@ -435,17 +427,14 @@ void polytope::load_base(char* fname)
 	}
 	else
 	{
-		//’¸“_‚Ìƒf[ƒ^‚ğƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚ŞB
-		//’¸“_‚ÌƒIƒuƒWƒFƒNƒg‚ğì‚è’¼‚·B
-		delete vertices;
-		vertices=new points;
-        points buf;
-		((points)(*vertices)).read(is);
-		//’¸“_‚Ìƒtƒ‰ƒO‚ğ¶¬‚·‚éB
-		delete flag_vertices;
-		flag_vertices=new flag(vertices->n);
+		//é ‚ç‚¹ã®ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€ã€‚
+		//é ‚ç‚¹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œã‚Šç›´ã™ã€‚
+		vertices.reset(new points);
+		vertices->read(is);
+		//é ‚ç‚¹ã®ãƒ•ãƒ©ã‚°ã‚’ç”Ÿæˆã™ã‚‹ã€‚
+		flag_vertices.reset(new flag(vertices->n));
 
-		//ƒxƒNƒgƒ‹‚Ì’·‚³‚ğ’²®‚·‚éB
+		//ãƒ™ã‚¯ãƒˆãƒ«ã®é•·ã•ã‚’èª¿æ•´ã™ã‚‹ã€‚
 		double l=0;
 		for(i=0;i<vertices->n;i++)
 			l=__max(l,(*vertices)[i].norm());
@@ -453,28 +442,28 @@ void polytope::load_base(char* fname)
 		for(i=0;i<vertices->n;i++)
 			(*vertices)[i]*=(1.0/l);
 		vertices->edgelength *=(1.0/l);
-		//ƒ^ƒCƒgƒ‹Aƒf[ƒ^‚ÌƒfƒBƒŒƒNƒgƒŠ[‚È‚Ç‚ğİ’è‚·‚éB
+		//ã‚¿ã‚¤ãƒˆãƒ«ã€ãƒ‡ãƒ¼ã‚¿ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ¼ãªã©ã‚’è¨­å®šã™ã‚‹ã€‚
 		static std::string loaded_name;
 		loaded_name=filename(fname);
 		name=(char*)loaded_name.c_str();
 		dir=Directory(fname);
 //		Parent->SetDocTitle(title,0);
 
-		//‘O‚Ì‘½–E‘Ì‚Ìƒf[ƒ^‚ªc‚Á‚Ä‚¢‚ê‚ÎÁ‚·B
-		delete faces; faces=NULL;
-		delete edges; edges=NULL;
-		delete Facets; Facets=NULL;
-		delete flag_Facets; flag_Facets=NULL;
-		delete flag_edges; flag_edges=NULL;
-		delete flag_faces; flag_faces=NULL;
+		//å‰ã®å¤šèƒä½“ã®ãƒ‡ãƒ¼ã‚¿ãŒæ®‹ã£ã¦ã„ã‚Œã°æ¶ˆã™ã€‚
+		faces.reset();
+		edges.reset();
+		Facets.reset();
+		flag_Facets.reset();
+		flag_edges.reset();
+		flag_faces.reset();
 //		delete fcenter; fcenter=NULL;
-		delete Facet_nomals; Facet_nomals=NULL;
-		delete Facets_to_edges; Facets_to_edges=NULL;
-		delete Facets_to_faces; Facets_to_faces=NULL;
+		Facet_nomals.reset();
+		Facets_to_edges.reset();
+		Facets_to_faces.reset();
 
-		//–Ê‚Ìƒf[ƒ^‚ğ“Ç‚İ‚ŞB
-		//ƒtƒ@ƒCƒ‹ƒl[ƒ€‚Í’¸“_‚Ìƒf[ƒ^‚Ì“ª‚Éf‚ğ‚Â‚¯‚Ä
-		//Šg’£q‚ğcel‚É‚µ‚½‚à‚Ì
+		//é¢ã®ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€ã€‚
+		//ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒ¼ãƒ ã¯é ‚ç‚¹ã®ãƒ‡ãƒ¼ã‚¿ã®é ­ã«fã‚’ã¤ã‘ã¦
+		//æ‹¡å¼µå­ã‚’celã«ã—ãŸã‚‚ã®
 		std::string tmp_name=dir + "\\f" + name + ".cel";
 		ifstream is2(tmp_name.c_str());
 		if (!is)
@@ -485,11 +474,11 @@ void polytope::load_base(char* fname)
 		read_faces(is2);
 		if(faces)
 		{
-			flag_faces=new flag(faces->n);
+			flag_faces.reset(new flag(faces->n));
 		}
 
-		//–E‚Ì’†S‚Ìƒf[ƒ^‚ğ“Ç‚İ‚ŞB
-		//ƒtƒ@ƒCƒ‹ƒl[ƒ€‚Í’¸“_‚Ìƒf[ƒ^‚©‚ç“Ç‚İ‚ŞB
+		//èƒã®ä¸­å¿ƒã®ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€ã€‚
+		//ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒ¼ãƒ ã¯é ‚ç‚¹ã®ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰èª­ã¿è¾¼ã‚€ã€‚
 		std::string ccfile;
 		is>>ccfile;
 		tmp_name=dir + "\\" + ccfile;
@@ -498,18 +487,17 @@ void polytope::load_base(char* fname)
 		read_Facet_nomals(is);
 		if(Facet_nomals)
 		{
-			flag_Facets=new flag(Facet_nomals->n);
+			flag_Facets.reset(new flag(Facet_nomals->n));
 		}
-		//–E‚Ìƒf[ƒ^‚ğ“Ç‚İ‚ŞB
-		//ƒtƒ@ƒCƒ‹ƒl[ƒ€‚Í’¸“_‚Ìƒf[ƒ^‚Ì“ª‚Éc‚ğ‚Â‚¯‚Ä
-		//Šg’£q‚ğcel‚É‚µ‚½‚à‚Ì
-		//‚à‚µƒtƒ@ƒCƒ‹‚ª‚È‚¯‚ê‚Î‰½‚à‚µ‚È‚¢B
+		//èƒã®ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€ã€‚
+		//ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒ¼ãƒ ã¯é ‚ç‚¹ã®ãƒ‡ãƒ¼ã‚¿ã®é ­ã«cã‚’ã¤ã‘ã¦
+		//æ‹¡å¼µå­ã‚’celã«ã—ãŸã‚‚ã®
+		//ã‚‚ã—ãƒ•ã‚¡ã‚¤ãƒ«ãŒãªã‘ã‚Œã°ä½•ã‚‚ã—ãªã„ã€‚
 		tmp_name=dir + "\\c" + name + ".cel";
 		ifstream is(tmp_name.c_str());
 		if(is)
 		{
-			delete Facets;
-			Facets=new cells();
+			Facets.reset(new cells());
 			is>>*Facets;
 		}
 	}

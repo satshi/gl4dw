@@ -1,7 +1,7 @@
-//ƒZƒ‹‚ÌƒNƒ‰ƒX
+//ã‚»ãƒ«ã®ã‚¯ãƒ©ã‚¹
 #include "cell.h"
 
-//‹——£‚ÌÅ¬’l‚ÌƒNƒ‰ƒX‚ÌŠÖ”B
+//è·é›¢ã®æœ€å°å€¤ã®ã‚¯ãƒ©ã‚¹ã®é–¢æ•°ã€‚
 void min_d::minD(const Vector4& vv,const aVector4& vx, double md)
 {
 	int i;
@@ -20,7 +20,7 @@ void min_d::minD(const Vector4& vv,const aVector4& vx, double md)
 }
 
 
-//‚ ‚é“_icell‚Ì’†Sj‚©‚ç“¯‚¶‹——£iÅ¬j‚É‚ ‚é“_‚½‚¿‚ğcell‚Æ‚·‚éB
+//ã‚ã‚‹ç‚¹ï¼ˆcellã®ä¸­å¿ƒï¼‰ã‹ã‚‰åŒã˜è·é›¢ï¼ˆæœ€å°ï¼‰ã«ã‚ã‚‹ç‚¹ãŸã¡ã‚’cellã¨ã™ã‚‹ã€‚
 //
 
 cell::cell(const Vector4& center, const aVector4& vx)
@@ -38,9 +38,7 @@ cell::cell(const Vector4& center, const aVector4& vx)
 			m++;
 		}
 	}
-	size=m;
-	n=m;
-	ptr=new INDEX[size];
+	renew(m);
 
 	for(i=0;i<n;i++)ptr[i]=ix[i];
 }
@@ -50,7 +48,7 @@ void cell::F_sort(const acell& edges)
 {
 	INDEX j,k,l,m;
 
-	if(n>3) //   OŠpŒ`‚Å‚È‚¢‚È‚ç‚ÎŒã‚Ìˆ—‚ğ‚·‚é
+	if(n>3) //   ä¸‰è§’å½¢ã§ãªã„ãªã‚‰ã°å¾Œã®å‡¦ç†ã‚’ã™ã‚‹
 	for(j=0;j<n-1;j++)
 	{
 		for(k=j+1;k<n;k++)
@@ -59,9 +57,9 @@ void cell::F_sort(const acell& edges)
 			if( (edges[l][0]==(*this)[j] && edges[l][1]==(*this)[k]) ||
 				(edges[l][1]==(*this)[j] && edges[l][0]==(*this)[k])  )
 			{
-			//“ü‚êŠ·‚¦
+			//å…¥ã‚Œæ›ãˆ
 			m=(*this)[j+1];(*this)[j+1]=(*this)[k];(*this)[k]=m;
-			goto roop1;//ƒ‹[ƒv‚©‚ç”²‚¯‚é
+			goto roop1;//ãƒ«ãƒ¼ãƒ—ã‹ã‚‰æŠœã‘ã‚‹
 			}
 		}
   roop1:

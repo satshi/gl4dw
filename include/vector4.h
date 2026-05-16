@@ -10,25 +10,25 @@
 #include "vector3.h"
 #include "tary.h"
 
-//	**********	‚SŸŒ³ƒxƒNƒgƒ‹‚ÌƒNƒ‰ƒX		*******************
+//	**********	ï¼”æ¬¡å…ƒãƒ™ã‚¯ãƒˆãƒ«ã®ã‚¯ãƒ©ã‚¹		*******************
 
 class Vector4
 {
 	public:
-	double x[4];	//	¬•ª
+	double x[4];	//	æˆåˆ†
 
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^[
+	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ãƒ¼
 	Vector4();
 	Vector4(double,double,double,double);
 	Vector4(const Vector4&);
 
-	//‰‰Zq
+	//æ¼”ç®—å­
 	friend Vector4 operator+(const Vector4&,const Vector4&);
 	friend Vector4 operator-(const Vector4&,const Vector4&);
-	friend Vector4 operator*(double,const Vector4&); // ƒXƒJƒ‰[”{
-	friend Vector4 operator*(const Vector4&,double); // ƒXƒJƒ‰[”{
-	friend double operator*(const Vector4&,const Vector4&); //“àÏ
-	friend double dot(const Vector4&,const Vector4&); //“àÏ
+	friend Vector4 operator*(double,const Vector4&); // ã‚¹ã‚«ãƒ©ãƒ¼å€
+	friend Vector4 operator*(const Vector4&,double); // ã‚¹ã‚«ãƒ©ãƒ¼å€
+	friend double operator*(const Vector4&,const Vector4&); //å†…ç©
+	friend double dot(const Vector4&,const Vector4&); //å†…ç©
 
 	Vector4& operator=(const Vector4&);
 	Vector4& operator+=(const Vector4&);
@@ -46,26 +46,26 @@ class Vector4
 		return x[i];
 	}
 
-	//ŠÖ”
-	double norm();//  ’·‚³
-	//‰ñ“]
-	void rotation(double* /* Šp“x‚Ì”z—ñ 6ŒÂ‚Ì¬•ª@*/);
-	friend Vector4 rotation(double* /* Šp“x‚Ì”z—ñ 6ŒÂ‚Ì¬•ª@*/,Vector4&);
+	//é–¢æ•°
+	double norm();//  é•·ã•
+	//å›è»¢
+	void rotation(double* /* è§’åº¦ã®é…åˆ— 6å€‹ã®æˆåˆ†ã€€*/);
+	friend Vector4 rotation(double* /* è§’åº¦ã®é…åˆ— 6å€‹ã®æˆåˆ†ã€€*/,Vector4&);
 
-	//ƒxƒNƒgƒ‹‚Ì”z—ñ
+	//ãƒ™ã‚¯ãƒˆãƒ«ã®é…åˆ—
 	typedef Ary<Vector4> aVector4;
 	
-	//Ë‰e
+	//å°„å½±
 	Vector3 projection();
 	Vector3 projection(const aVector4&);
-	friend double distance(const Vector4&,const Vector4&); // ’·‚³
+	friend double distance(const Vector4&,const Vector4&); // é•·ã•
 	friend istream& operator>>(istream&,Vector4&);
 	friend ostream& operator<<(ostream&,const Vector4&);
 };
 
-//ƒCƒ“ƒ‰ƒCƒ“ŠÖ”
+//ã‚¤ãƒ³ãƒ©ã‚¤ãƒ³é–¢æ•°
 
-//	ƒRƒ“ƒXƒgƒ‰ƒNƒ^[
+//	ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ãƒ¼
 inline Vector4::Vector4()
 {
 	x[0]=0;
@@ -90,7 +90,7 @@ inline Vector4::Vector4(const Vector4& v)
 	x[3]=v.x[3];
 }
 
-//		*********	‰‰Zq	**************
+//		*********	æ¼”ç®—å­	**************
 inline Vector4 operator+(const Vector4& v1,const Vector4& v2)
 {
 	return Vector4(v1.x[0]+v2.x[0], v1.x[1]+v2.x[1], v1.x[2]+v2.x[2], v1.x[3]+v2.x[3]);
@@ -102,25 +102,25 @@ inline Vector4 operator-(const Vector4& v1,const Vector4& v2)
 	return Vector4(v1.x[0]-v2.x[0], v1.x[1]-v2.x[1], v1.x[2]-v2.x[2], v1.x[3]-v2.x[3]);
 }
 
-//	ƒXƒJƒ‰[”{
+//	ã‚¹ã‚«ãƒ©ãƒ¼å€
 inline Vector4 operator*(double k,const Vector4& v2)
 {
 	return Vector4(k*(v2.x[0]), k*(v2.x[1]), k*(v2.x[2]), k*(v2.x[3]));
 }
 
-//	ƒXƒJƒ‰[”{
+//	ã‚¹ã‚«ãƒ©ãƒ¼å€
 inline Vector4 operator*(const Vector4& v2,double k)
 {
 	return Vector4(k*(v2.x[0]), k*(v2.x[1]), k*(v2.x[2]), k*(v2.x[3]));
 }
 
-//“àÏ
+//å†…ç©
 inline double operator*(const Vector4& v1,const Vector4& v2) 
 {
 	return (v1.x[0])*(v2.x[0]) + (v1.x[1])*(v2.x[1]) + (v1.x[2])*(v2.x[2]) + (v1.x[3])*(v2.x[3]);
 }
 
-//“àÏ ‚¨‚»‚ç‚­‚±‚¿‚ç‚ğg‚¤‚Ù‚¤‚ª–]‚Ü‚µ‚¢
+//å†…ç© ãŠãã‚‰ãã“ã¡ã‚‰ã‚’ä½¿ã†ã»ã†ãŒæœ›ã¾ã—ã„
 inline double dot(const Vector4& v1,const Vector4& v2) 
 {
 	return (v1.x[0])*(v2.x[0]) + (v1.x[1])*(v2.x[1]) + (v1.x[2])*(v2.x[2]) + (v1.x[3])*(v2.x[3]);
@@ -153,7 +153,7 @@ inline Vector4& Vector4::operator-=(const Vector4& v1)
 	return *this;
 }
 
-//	ƒXƒJƒ‰[”{
+//	ã‚¹ã‚«ãƒ©ãƒ¼å€
 inline Vector4& Vector4::operator*=(double k)
 {
 	x[0]*=k;
@@ -173,21 +173,21 @@ inline Vector4& Vector4::operator/=(double k)
 }
 
 
-//	****************	ŠÖ”	*****************
+//	****************	é–¢æ•°	*****************
 
-// ƒxƒNƒgƒ‹‚Ìƒmƒ‹ƒ€i’·‚³j‚ğ‹‚ß‚é
+// ãƒ™ã‚¯ãƒˆãƒ«ã®ãƒãƒ«ãƒ ï¼ˆé•·ã•ï¼‰ã‚’æ±‚ã‚ã‚‹
 inline double Vector4::norm()
 {
 	return sqrt( x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3]);
 }
 
-// ‚Q‚Â‚ÌƒxƒNƒgƒ‹i“_j‚ÌŠÔ‚Ì‹——£‚ğ‹‚ß‚é
+// ï¼’ã¤ã®ãƒ™ã‚¯ãƒˆãƒ«ï¼ˆç‚¹ï¼‰ã®é–“ã®è·é›¢ã‚’æ±‚ã‚ã‚‹
 inline double distance(const Vector4& v1,const Vector4& v2)
 {
 	return (v1-v2).norm();
 }
 
-//‚RŸŒ³‚Ö‚ÌË‰e
+//ï¼“æ¬¡å…ƒã¸ã®å°„å½±
 inline Vector3 Vector4::projection()
 {
 	return Vector3(x[0], x[1], x[2]);
@@ -198,11 +198,11 @@ inline Vector3 Vector4::projection(const aVector4& basis)
 	return Vector3((*this)*basis[0], (*this)*basis[1], (*this)*basis[2]);
 }
 
-//’è”
+//å®šæ•°
 
 typedef Vector4::aVector4 aVector4;
 
-//	--------	ƒXƒgƒŠ[ƒ€“üo—Í	----------
+//	--------	ã‚¹ãƒˆãƒªãƒ¼ãƒ å…¥å‡ºåŠ›	----------
 inline ostream& operator<<(ostream& os, const Vector4& v)
 {
 	return(os<<(v.x[0])<<" "<<(v.x[1])<<" "

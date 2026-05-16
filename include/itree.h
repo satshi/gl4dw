@@ -1,5 +1,5 @@
 /*
- —Å‚ğì‚é‚½‚ß‚Ég‚¤–Ø
+ ç¨œã‚’ä½œã‚‹ãŸã‚ã«ä½¿ã†æœ¨
 */
 
 #ifndef ITREE_H_
@@ -18,7 +18,7 @@ typedef int BOOL;
 class itree
 {
   public:
-	//-----------------------------ƒm[ƒh‚ÌƒNƒ‰ƒX
+	//-----------------------------ãƒãƒ¼ãƒ‰ã®ã‚¯ãƒ©ã‚¹
 	class node
 	{
 	  public:
@@ -26,7 +26,7 @@ class itree
 		node* left;
 		node* right;
 		
-		node() //ƒfƒtƒH[ƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		node() //ãƒ‡ãƒ•ã‚©ãƒ¼ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		{
 			key=0;
 			left=NULL;
@@ -41,7 +41,7 @@ class itree
 		}
 	}
 	
-	//-----------------------‚±‚±‚©‚ç–Ø‚Ìƒƒ“ƒo[
+	//-----------------------ã“ã“ã‹ã‚‰æœ¨ã®ãƒ¡ãƒ³ãƒãƒ¼
 	node* root;
 	int n;
 	
@@ -54,8 +54,8 @@ class itree
 	~itree();
 	
 	
-	BOOL drop(ULONG nkey);//polytope.cpp‚Å’è‹`‚·‚éB
-	ULONG* toAry(); //”z—ñ‚É‚·‚éB
+	BOOL drop(ULONG nkey);//polytope.cppã§å®šç¾©ã™ã‚‹ã€‚
+	ULONG* toAry(); //é…åˆ—ã«ã™ã‚‹ã€‚
 }
 
 #endif  //#ifndef ITREE_H_

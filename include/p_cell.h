@@ -1,13 +1,13 @@
-// ƒZƒ‹‚ÌƒNƒ‰ƒX
+// ã‚»ãƒ«ã®ã‚¯ãƒ©ã‚¹
 
 #ifndef _P_CELL_H
 #define _P_CELL_H
 
 #include "dust.h"
 
-#include"tary.h"//”z—ñ‚Ìƒeƒ“ƒvƒŒ[ƒgB
-				//typedef int INDEX‚ª’è‹`‚³‚ê‚Ä‚¢‚é
-//#include "points.h"	//’¸“_‚ÌƒNƒ‰ƒX
+#include"tary.h"//é…åˆ—ã®ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã€‚
+				//typedef int INDEXãŒå®šç¾©ã•ã‚Œã¦ã„ã‚‹
+//#include "points.h"	//é ‚ç‚¹ã®ã‚¯ãƒ©ã‚¹
 
 typedef Ary<INDEX> aINDEX;
 
@@ -18,20 +18,20 @@ class p_cell:public aINDEX
 	p_cell():aINDEX(){}
 	p_cell(INDEX sz):aINDEX(sz){}
 	p_cell(const aINDEX& x):aINDEX(x){}
-	// ‰‰Zq
-	BOOL inclusion(INDEX ix) const;//c‚ª—v‘f‚Æ‚µ‚Äix‚ğ‚Â‚©‚Ç‚¤‚©
-	BOOL inclusion(const p_cell&) const;//•ïŠÜŠÖŒW
-	friend p_cell intersection(const p_cell&, const p_cell&);//‹¤’Ê•”•ª
+	// æ¼”ç®—å­
+	BOOL inclusion(INDEX ix) const;//cãŒè¦ç´ ã¨ã—ã¦ixã‚’æŒã¤ã‹ã©ã†ã‹
+	BOOL inclusion(const p_cell&) const;//åŒ…å«é–¢ä¿‚
+	friend p_cell intersection(const p_cell&, const p_cell&);//å…±é€šéƒ¨åˆ†
 
-//ˆÈ‰º‚ÌŠÖ”‚Í©•ª©g‚ªƒ\[ƒg‚³‚ê‚Ä‚¢‚é‚Æ‚«‚É‚Ì‚İg‚¤B
-//friend ‚Í—¼•ûƒ\[ƒg‚³‚ê‚Ä‚¢‚é‚Æ‚«‚Ì‚İ
+//ä»¥ä¸‹ã®é–¢æ•°ã¯è‡ªåˆ†è‡ªèº«ãŒã‚½ãƒ¼ãƒˆã•ã‚Œã¦ã„ã‚‹ã¨ãã«ã®ã¿ä½¿ã†ã€‚
+//friend ã¯ä¸¡æ–¹ã‚½ãƒ¼ãƒˆã•ã‚Œã¦ã„ã‚‹ã¨ãã®ã¿
 	friend int cellcmp(const p_cell&, const p_cell&);
-	BOOL inclusion_s(INDEX ix) const;//c‚ª—v‘f‚Æ‚µ‚Äix‚ğ‚Â‚©‚Ç‚¤‚©
-	BOOL inclusion_s(const p_cell&) const;//•ïŠÜŠÖŒW
-	p_cell intersection_s(const p_cell&);//‹¤’Ê•”•ª
+	BOOL inclusion_s(INDEX ix) const;//cãŒè¦ç´ ã¨ã—ã¦ixã‚’æŒã¤ã‹ã©ã†ã‹
+	BOOL inclusion_s(const p_cell&) const;//åŒ…å«é–¢ä¿‚
+	p_cell intersection_s(const p_cell&);//å…±é€šéƒ¨åˆ†
 };
 
 
-typedef Ary<p_cell> ap_cell;  //cell‚Ì”z—ñ
+typedef Ary<p_cell> ap_cell;  //cellã®é…åˆ—
 
 #endif

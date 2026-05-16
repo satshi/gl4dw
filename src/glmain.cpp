@@ -67,7 +67,7 @@ void init(void)
 	glFogfv(GL_FOG_COLOR, fog_color);
 	glEnable(GL_FOG);
 
-	//Ø’f
+	//åˆ‡æ–­
 	glClipPlane(GL_CLIP_PLANE0, clip_plane);
 	if(Clip)glEnable(GL_CLIP_PLANE0);
 }
@@ -75,9 +75,9 @@ void init(void)
 int main(int argc, char** argv)
 {
 	log_step("main: start");
-	read_param();  //ƒpƒ‰ƒ[ƒ^‚Ì“Ç‚İ‚İB
+	read_param();  //ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿ã€‚
 	log_step("main: read_param done");
-	// ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚Ì“Ç‚İ‚İ
+	// ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã®èª­ã¿è¾¼ã¿
 	read_comandline(argc, argv);
 	log_step("main: read_commandline done");
 	if(!ReadPolytope(name))
@@ -86,7 +86,7 @@ int main(int argc, char** argv)
 		return 1;
 	}
 	log_step("main: ReadPolytope done");
-	//OpenGL‚Ì‰Šú‰»
+	//OpenGLã®åˆæœŸåŒ–
 	glutInit(&argc, argv);
 	log_step("main: glutInit done");
 	glutInitWindowPosition(100, 100);
@@ -99,17 +99,17 @@ int main(int argc, char** argv)
 	log_step(logbuf.c_str());
 	glutShowWindow();
 	glutPostRedisplay();
-	// ƒCƒxƒ“ƒgˆ—ŠÖ”
+	// ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†é–¢æ•°
 	glutDisplayFunc(ev_display);
 	glutReshapeFunc(ev_resize);
 	glutMouseFunc(ev_mouse);
 	glutMotionFunc(ev_move);
 	glutIdleFunc(ev_idle);
 	glutKeyboardFunc(ev_key);
-	//ƒV[ƒ“‚Ì‰Šú‰»
+	//ã‚·ãƒ¼ãƒ³ã®åˆæœŸåŒ–
 	init();
 	log_step("main: init done");
-	// ƒƒCƒ“ƒ‹[ƒv
+	// ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ—
 	log_step("main: entering glutMainLoop");
 	glutMainLoop();
 	return 0;

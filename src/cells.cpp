@@ -1,6 +1,6 @@
 #include "cells.h"
-//	***************** 	�Z�������̊֐�		*********************
-//�R���X�g���N�^
+//	***************** 	セルたちの関数		*********************
+//コンストラクタ
 /*
 cells::cells(char* fname )
 {
@@ -13,8 +13,8 @@ cells::cells(char* fname )
 }
 */
 
-//���ʂ̃Z��c1�̃f�[�^�Ə�ʂ̃Z��c2�ɑ����钸�_�̃f�[�^����A
-//��ʂ̃Z���ɑ����鉺�ʂ̃Z���̃f�[�^�����߂�
+//下位のセルc1のデータと上位のセルc2に属する頂点のデータから、
+//上位のセルに属する下位のセルのデータを求める
 cells::cells(const acell& c1,const acell& c2,int vn/*=0*/)
 {
 	int i,j,k,m;
@@ -36,12 +36,12 @@ cells::cells(const acell& c1,const acell& c2,int vn/*=0*/)
 
 	for(i=0;i<n;i++)
 	{
-		// ���b�Z�[�W�����A�p�[�Z���g�\��
+		// メッセージ処理、パーセント表示
 		if((i%100)==0)
 		{
 			if(interupt(i*100/n))return;
 		}
-		// �����܂�
+		// ここまで
 
 		for(j=0;j<c2[i].n;j++)hash[c2[i][j]]=1;
 		m=0;
@@ -52,7 +52,7 @@ cells::cells(const acell& c1,const acell& c2,int vn/*=0*/)
 			{
 				if(hash[c1[j][k]]==0)goto next;
 			}
-			//c1[j]��c2[i]�ɂӂ��܂�Ă�����
+			//c1[j]がc2[i]にふくまれていたら
 			buf[m]=j;
 			m++;
 		  next:;
@@ -65,48 +65,46 @@ cells::cells(const acell& c1,const acell& c2,int vn/*=0*/)
 }
 
 
-cells::cells(const aVector4& center /*�Z���̒��S*/ , const aVector4& vx /*���_*/ )
+cells::cells(const aVector4& center /*セルの中心*/ , const aVector4& vx /*頂点*/ )
 {
 	renew(center.n);
 
 	int i;
 	for(i=0;i<n;i++)
 	{
-//      ���b�Z�[�W�����A�p�[�Z���g�\��
+//      メッセージ処理、パーセント表示
 		if((i%100)==0)
 		{
 			if(interupt(i*100/n))return;
 		}
-//      �����܂�
+//      ここまで
 		ptr[i]=cell(center[i], vx);
 	}
 }
 
-//�t�ɉ���
+//逆に解く
 void cells::inverse(const acell& ce)
 {
 	int i,j,nn=0,m;
 
-	//�v�f�̍ő�l�����߂�
+	//要素の最大値を求める
 	for(i=0;i<ce.n;i++)
 		for(j=0;j<ce[i].n;j++)
 			if(nn<ce[i][j]) nn=ce[i][j];
 
-	n=nn;
-	delete [] ptr;
-	ptr=new cell[n];
+	renew(nn);
 
-	cell buf(MAX_NUMBER_PER_CELL);//�ꎞ�ϐ�
+	cell buf(MAX_NUMBER_PER_CELL);//一時変数
 	for(i=0;i<n;i++)
 	{
-//      ���b�Z�[�W�����A�p�[�Z���g�\��
+//      メッセージ処理、パーセント表示
 			if(interupt(i*100/n))return;
-//      �����܂�
+//      ここまで
 		m=0;
 
 		for(j=0;j<ce.n;j++)
 		{
-			if(ce[j].inclusion_s(i)) //i��ce[j]�ɂӂ��܂�Ă����
+			if(ce[j].inclusion_s(i)) //iがce[j]にふくまれていれば
 			{
 				buf[m]=j;
 				m++;
@@ -117,32 +115,32 @@ void cells::inverse(const acell& ce)
 	}
 }
 
-//�t�ɉ���
+//逆に解く
 cells* cells::inverse() const
 {
 	int i,j,nn=0,m;
 	cells* ret;
 
-	//�v�f�̍ő�l�����߂�
+	//要素の最大値を求める
 	for(i=0;i<n;i++)
 		for(j=0;j<ptr[i].n;j++)
 			if(nn<ptr[i][j]) nn=ptr[i][j];
 
 	ret=new cells(nn);
-	cell buf(MAX_NUMBER_PER_CELL);//�ꎞ�ϐ�
+	cell buf(MAX_NUMBER_PER_CELL);//一時変数
 	for(i=0;i<ret->n;i++)
 	{
-//      ���b�Z�[�W�����A�p�[�Z���g�\��
+//      メッセージ処理、パーセント表示
 		if(i%100==0)
 		{
 			if(ret->interupt(i*100/(ret->n)))return NULL;
 		}
-//      �����܂�
+//      ここまで
 		m=0;
 
 		for(j=0;j<n;j++)
 		{
-			if(ptr[j].inclusion_s(i)) //i��ce[j]�ɂӂ��܂�Ă����
+			if(ptr[j].inclusion_s(i)) //iがce[j]にふくまれていれば
 			{
 				buf[m]=j;
 				m++;
@@ -184,7 +182,7 @@ cells* cells::break_face()
 	return new cells(ed);
 }
 
-//���בւ��A�ʂ̏ꍇ�ɏ��Ԃ𐳂������בւ���
+//並べ替え、面の場合に順番を正しく並べ替える
 void cells::F_sort(const acell& eds)
 {
 	int i;
@@ -192,16 +190,16 @@ void cells::F_sort(const acell& eds)
 	for(i=0;i<n;i++)
 	{
 		ptr[i].F_sort(eds);
-//      ���b�Z�[�W�����A�p�[�Z���g�\��
+//      メッセージ処理、パーセント表示
 		if(i%100==0)
 		{
 			if(interupt(i*100/n))return;
 		}
-//      �����܂�
+//      ここまで
 	}
 }
 
-//�X�g���[�����o��
+//ストリーム入出力
 BOOL cells::write(ostream& os) const
 {
 	int i;
@@ -213,7 +211,7 @@ BOOL cells::write(ostream& os) const
 	return TRUE;
 }
 
-//	***********************		�t���O�̊֐�	********************
+//	***********************		フラグの関数	********************
 void flag::gen(const Vector4& vv, const aVector4& vx, double b)
 {
 	int i;
@@ -280,20 +278,20 @@ void flag::gen_surface(const cells& ces,const flag& fls)
 	}
 }
 
-//�\�ʂ̖E���������o���֐��@to_child�ɖE�[���ʂ̃f�[�^�A�Af_child��
-//�ʂ̃t���O�i���炩����gen_surface�����Ă����B
+//表面の胞だけを取り出す関数　to_childに胞ー＞面のデータ、、f_childに
+//面のフラグ（あらかじめgen_surfaceをしておく。
 void flag::gen_up(const cells& to_child,const flag& f_child)
 {
 	int i,j;
 
 	for(i=0;i<n;i++)
 	{
-		if(ptr[i])//�\�̖E������������B
+		if(ptr[i])//表の胞だけ処理する。
 		{
 			ptr[i]=0;
 			for(j=0;j<to_child[i].n;j++)
 			{
-				if(f_child[ to_child[i][j] ])//�\�ʂ̖ʂ��܂�ł�����B
+				if(f_child[ to_child[i][j] ])//表面の面を含んでいたら。
 				{
 					ptr[i]=1;
 					break;

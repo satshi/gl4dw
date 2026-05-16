@@ -1,13 +1,13 @@
 /* -------------------------------------------------------------------------
- *	‘½–E‘Ì‚ğ¶¬‚·‚éƒNƒ‰ƒX‚Ìƒƒ“ƒo[ŠÖ”
- *	‚P‚X‚X‚U”N@‚P‚OŒ@@RŒû@“N
+ *	å¤šèƒä½“ã‚’ç”Ÿæˆã™ã‚‹ã‚¯ãƒ©ã‚¹ã®ãƒ¡ãƒ³ãƒãƒ¼é–¢æ•°
+ *	ï¼‘ï¼™ï¼™ï¼–å¹´ã€€ï¼‘ï¼æœˆã€€ã€€å±±å£ã€€å“²
  * ---------------------------------------------------------------------- */
 
 #include "polytope.h"
 #include "pgen.h"
 
 /* -------------------------------------------------------------------------
- *	Šp’Œ‚ğ¶¬‚·‚é
+ *	è§’æŸ±ã‚’ç”Ÿæˆã™ã‚‹
  * ---------------------------------------------------------------------- */
 void mn_generater::generate(polytope& p)
 {
@@ -17,8 +17,7 @@ void mn_generater::generate(polytope& p)
 	lm=1.0/sin(M_PI/m);
 	ln=1.0/sin(M_PI/n);
 	
-	delete p.vertices;
-	p.vertices=new points(m*n);
+	p.vertices.reset(new points(m*n));
 	for(i=0;i<m;i++)for(j=0;j<n;j++)
 	{
 		(*p.vertices)[c][0]=lm*cos(2.0*M_PI*i/m);
@@ -31,7 +30,7 @@ void mn_generater::generate(polytope& p)
 	for(i=0;i<p.vertices->n;i++)(*p.vertices)[i]*=ll;
 	p.vertices->edgelength=distance((*p.vertices)[1],(*p.vertices)[2]);
 
-	points fcenter(m*n+m+n);//–Ê‚Ì’†SBˆê“I‚Ég‚¤B
+	points fcenter(m*n+m+n);//é¢ã®ä¸­å¿ƒã€‚ä¸€æ™‚çš„ã«ä½¿ã†ã€‚
 	c=0;
 	for(i=0;i<m;i++)for(j=0;j<n;j++)
 	{
@@ -58,8 +57,7 @@ void mn_generater::generate(polytope& p)
 		c++;
 	}
 
-	delete p.Facet_nomals;
-	p.Facet_nomals=new points(m+n);
+	p.Facet_nomals.reset(new points(m+n));
 	c=0;
 	for(i=0;i<m;i++)
 	{
@@ -77,21 +75,20 @@ void mn_generater::generate(polytope& p)
 		(*p.Facet_nomals)[c][3]=sin(2.0*M_PI*(i+0.5)/n);
 		c++;
 	}
-	delete p.faces;p.faces=NULL;
+	p.faces.reset();
 	p.make__edges_from_vertices();
-	delete p.faces;p.faces=new cells(fcenter,*p.vertices);
+	p.faces.reset(new cells(fcenter,*p.vertices));
 	p.make__Facets();
 
-	delete p.flag_Facets;
-	p.flag_Facets=new flag(p.Facet_nomals->n);
-	delete p.flag_faces;
+	p.flag_Facets.reset(new flag(p.Facet_nomals->n));
+	p.flag_faces.reset();
 //	p.flag_faces=new flag(p.fcenter->n);
-	delete p.Facets_to_edges;p.Facets_to_edges=NULL;
-	delete p.Facets_to_faces;p.Facets_to_faces=NULL;
+	p.Facets_to_edges.reset();
+	p.Facets_to_faces.reset();
 }
 
 /* -------------------------------------------------------------------------
- *	”¼Šp’Œ‚ğ¶¬‚·‚é
+ *	åŠè§’æŸ±ã‚’ç”Ÿæˆã™ã‚‹
  * ---------------------------------------------------------------------- */
 void anti_mn_generater::generate(polytope& p)
 {
@@ -101,8 +98,7 @@ void anti_mn_generater::generate(polytope& p)
 	m *= 2; n *= 2;
 	lm=1.0/sin(M_PI/m);
 	ln=1.0/sin(M_PI/n);
-	delete p.vertices;
-	p.vertices=new points(m*n/2);
+	p.vertices.reset(new points(m*n/2));
 	for(i=0;i<m;i++)for(j=0;j<n;j+=2)
 	{
 		(*p.vertices)[c][0]=lm*cos(2.0*M_PI*i/m);
@@ -136,8 +132,7 @@ void anti_mn_generater::generate(polytope& p)
 		c++;
 	}
 
-	delete p.Facet_nomals;
-	p.Facet_nomals=new points(m+n+m*n/2);
+	p.Facet_nomals.reset(new points(m+n+m*n/2));
 	c=0;
 	for(i=0;i<m;i++)for(j=0;j<n;j+=2)
 	{
@@ -168,8 +163,7 @@ void anti_mn_generater::generate(polytope& p)
 	}
 	p.make__Facets();
 	cells facese(fcen,*p.vertices);
-	delete p.faces;
-	p.faces=new cells(m*n*2+m+n);
+	p.faces.reset(new cells(m*n*2+m+n));
 	for(i=0;i<m+n;i++)(*p.faces)[i]=facese[i];
 	c=m+n;
 	for(i=0;i<m*n/2;i++)
@@ -190,10 +184,8 @@ void anti_mn_generater::generate(polytope& p)
 			c++;
 		}
 	}
-	delete p.flag_Facets;
-	p.flag_Facets=new flag(p.Facet_nomals->n);
-	delete p.flag_faces;
-	p.flag_faces=new flag(p.faces->n);
-	delete p.Facets_to_faces;p.Facets_to_faces=NULL;
-	delete p.Facets_to_edges;p.Facets_to_edges=NULL;
+	p.flag_Facets.reset(new flag(p.Facet_nomals->n));
+	p.flag_faces.reset(new flag(p.faces->n));
+	p.Facets_to_faces.reset();
+	p.Facets_to_edges.reset();
 }

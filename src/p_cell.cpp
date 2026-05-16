@@ -1,7 +1,7 @@
-//�Z���̃N���X
+//セルのクラス
 #include "p_cell.h"
 
-//INDEX ix��p_cell c�ɑ����邩�ǂ���
+//INDEX ixがp_cell cに属するかどうか
 BOOL p_cell::inclusion(INDEX ix) const
 {
 	for(INDEX i=0;i<n;i++)
@@ -11,7 +11,7 @@ BOOL p_cell::inclusion(INDEX ix) const
 	return FALSE;
 }
 
-//cell c1��cell c2�Ɋ܂܂�邩�ǂ���
+//cell c1がcell c2に含まれるかどうか
 BOOL p_cell::inclusion(const p_cell& c1) const
 {
 	for(INDEX i=0;i<c1.n;i++)
@@ -21,7 +21,7 @@ BOOL p_cell::inclusion(const p_cell& c1) const
 	return TRUE;
 }
 
-//c1,c2�̋��ʕ���
+//c1,c2の共通部分
 p_cell intersection(const p_cell& c1, const p_cell& c2)
 {
 	p_cell ret(MAX_NUMBER_PER_CELL);
@@ -39,8 +39,8 @@ p_cell intersection(const p_cell& c1, const p_cell& c2)
 }
 
 //
-//�ȉ��̊֐��͎������g���\�[�g����Ă���Ƃ��ɂ̂ݎg���B
-//�召�֌W�����߂�
+//以下の関数は自分自身がソートされているときにのみ使う。
+//大小関係を決める
 int cellcmp(const p_cell& c1, const p_cell& c2)
 {
 	int i;
@@ -58,7 +58,7 @@ int cellcmp(const p_cell& c1, const p_cell& c2)
 	else return 0;
 }
 
-//INDEX ix��p_cell c�ɑ����邩�ǂ���
+//INDEX ixがp_cell cに属するかどうか
 BOOL p_cell::inclusion_s(INDEX ix)  const
 {
 	int l=0,u=n-1;
@@ -81,7 +81,7 @@ BOOL p_cell::inclusion_s(INDEX ix)  const
 	return FALSE;
 }
 
-//cell c1��cell c2�Ɋ܂܂�邩�ǂ���
+//cell c1がcell c2に含まれるかどうか
 BOOL p_cell::inclusion_s(const p_cell& c1)  const
 {
 	for(INDEX i=0;i<c1.n;i++)
@@ -91,7 +91,7 @@ BOOL p_cell::inclusion_s(const p_cell& c1)  const
 	return TRUE;
 }
 
-//c1,c2�̋��ʕ���
+//c1,c2の共通部分
 p_cell intersection_s(const p_cell& c1, const p_cell& c2)
 {
 	p_cell ret(MAX_NUMBER_PER_CELL);
@@ -108,23 +108,3 @@ p_cell intersection_s(const p_cell& c1, const p_cell& c2)
 	return ret;
 }
 
-/*
-//�X�g���[�����o��
-ostream& operator<<(ostream& os,p_cell& c)
-{
-	int i;
-	os<<c.n<<" ";
-	for(i=0;i<c.n;i++)
-	   os<<c.ptr[i]<<" ";
-	return os;
-}
-
-istream& operator>>(istream& is,p_cell& c)
-{
-	is>>c.n;
-	delete [] c.ptr;
-	c.ptr=new  INDEX[c.n];
-	for(INDEX i=0;i<c.n;i++){is>>c.ptr[i];}
-	return is;
-}
-*/

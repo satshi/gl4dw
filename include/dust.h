@@ -3,17 +3,17 @@
 
 #include<math.h>
 
-//BOOL�̒�`
+//BOOLの定義
 typedef int BOOL;
 #define TRUE 1
 #define FALSE 0
-//�P�̃Z��������̗v�f�̐��̍ő�l
+//１つのセルあたりの要素の数の最大値
 #define MAX_NUMBER_PER_CELL 1024
 
-//�ł̐��̍ő�l
+//稜の数の最大値
 #define MAX_NUMBER_OF_EDGES 30000
 
-//�ʂ̐��̍ő�l
+//面の数の最大値
 #define MAX_NUMBER_OF_FACES 20000
 
 inline BOOL eql(double a, double b)

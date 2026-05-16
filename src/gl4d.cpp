@@ -17,9 +17,10 @@ double ExtendRate=0.06;
 
 static int open_data_file(ifstream& is, std::string& fname, const std::string& file_name)
 {
-	if(is.is_open()) is.close();
-	fname = data_dir + "\\" + file_name;
-	is.open(fname.c_str(), ios::in);
+        if(is.is_open()) is.close();
+        is.clear();
+        fname = data_dir + "\\" + file_name;
+        is.open(fname.c_str(), ios::in);
 	if(!is && data_dir == "data")
 	{
 		is.clear();

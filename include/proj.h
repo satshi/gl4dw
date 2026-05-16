@@ -1,6 +1,6 @@
 /*
-* ‚SŸŒ³‚©‚ç‚RŸŒ³‚Ö‚ÌË‰e‚ÌƒNƒ‰ƒX
-*  ƒwƒbƒ_
+* ï¼”æ¬¡å…ƒã‹ã‚‰ï¼“æ¬¡å…ƒã¸ã®å°„å½±ã®ã‚¯ãƒ©ã‚¹
+*  ãƒ˜ãƒƒãƒ€
 */
 
 #ifndef PROJ_H_
@@ -9,12 +9,12 @@
 #include"points.h"
 
 
-//Šî–{ƒNƒ‰ƒX@³Ë‰e
+//åŸºæœ¬ã‚¯ãƒ©ã‚¹ã€€æ­£å°„å½±
 class projector:public points
 {
 	public:
 
-	//‚S‚Â‚ÌƒxƒNƒgƒ‹‚Ì‘g‚Åp¨‚ğ•\‚·B
+	//ï¼”ã¤ã®ãƒ™ã‚¯ãƒˆãƒ«ã®çµ„ã§å§¿å‹¢ã‚’è¡¨ã™ã€‚
 	projector():points(4)
 	{
 		ptr[0]=Vector4(1,0,0,0);
@@ -33,11 +33,11 @@ class projector:public points
 	const static projector standerd;
 };
 
-//”h¶ƒNƒ‰ƒX@—§‘ÌË‰e
+//æ´¾ç”Ÿã‚¯ãƒ©ã‚¹ã€€ç«‹ä½“å°„å½±
 class stereo:public projector
 {
 	public:
-	Vector4 vp;//‹“_
+	Vector4 vp;//è¦–ç‚¹
 
 	stereo():projector()
 	{

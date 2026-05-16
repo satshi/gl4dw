@@ -1,44 +1,44 @@
-// ƒZƒ‹‚ÌƒNƒ‰ƒX
+// ã‚»ãƒ«ã®ã‚¯ãƒ©ã‚¹
 
 #ifndef _CELL_H
 #define _CELL_H
 
-#include"p_cell.h"//Œ´n“I‚ÈƒZƒ‹
-#include "vector4.h"	//’¸“_‚ÌƒNƒ‰ƒX
+#include"p_cell.h"//åŸå§‹çš„ãªã‚»ãƒ«
+#include "vector4.h"	//é ‚ç‚¹ã®ã‚¯ãƒ©ã‚¹
 
-//‹——£‚ÌÅ¬’l‚ÌƒNƒ‰ƒXB
+//è·é›¢ã®æœ€å°å€¤ã®ã‚¯ãƒ©ã‚¹ã€‚
 class min_d
 {
   public:
-	int ix;		//Å¬‚É‚È‚é“_‚Ì”Ô†
-	const Vector4 *vp;	//Å¬‚É‚È‚éƒxƒNƒgƒ‹‚Ìƒ|ƒCƒ“ƒ^
-	double d;	//‹——£‚ÌÅ¬’l
+	int ix;		//æœ€å°ã«ãªã‚‹ç‚¹ã®ç•ªå·
+	const Vector4 *vp;	//æœ€å°ã«ãªã‚‹ãƒ™ã‚¯ãƒˆãƒ«ã®ãƒã‚¤ãƒ³ã‚¿
+	double d;	//è·é›¢ã®æœ€å°å€¤
 
-	//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	min_d()	{ix=0; vp=NULL; d=0.0;}
 	
 	min_d(const Vector4& v, const aVector4& vx, double mm=0){minD(v,vx,mm);}
 	
-	//ƒf[ƒ^‚ğ‹‚ß‚éŠÖ”
-	/*double ‹——£‚ÌÅ¬’l‚ÌÅ¬’lB‚±‚ê‚æ‚è‚à¬‚³‚¢’l‚Í”F‚ß‚È‚¢*/
-	/*Vector4&’†S‚ÌƒxƒNƒgƒ‹B‚±‚Ì“_‚©‚ç‚Ì‹——£‚ÌÅ¬’l‚ğ‹‚ß‚é*/
-	/*vertices&‚±‚Ì“_‚½‚¿‚Ì’†‚©‚çÅ¬‚ğ‹‚ß‚é*/
+	//ãƒ‡ãƒ¼ã‚¿ã‚’æ±‚ã‚ã‚‹é–¢æ•°
+	/*double è·é›¢ã®æœ€å°å€¤ã®æœ€å°å€¤ã€‚ã“ã‚Œã‚ˆã‚Šã‚‚å°ã•ã„å€¤ã¯èªã‚ãªã„*/
+	/*Vector4&ä¸­å¿ƒã®ãƒ™ã‚¯ãƒˆãƒ«ã€‚ã“ã®ç‚¹ã‹ã‚‰ã®è·é›¢ã®æœ€å°å€¤ã‚’æ±‚ã‚ã‚‹*/
+	/*vertices&ã“ã®ç‚¹ãŸã¡ã®ä¸­ã‹ã‚‰æœ€å°ã‚’æ±‚ã‚ã‚‹*/
 	void minD(const Vector4&, const aVector4&, double mm=0);
-	void minD(double mm, const Vector4& v, const aVector4& vx){minD(v,vx,mm);}//Ì‚Ì‚à‚Ì‚Æ‚ÌŒİŠ·«‚Ì‚½‚ßB
+	void minD(double mm, const Vector4& v, const aVector4& vx){minD(v,vx,mm);}//æ˜”ã®ã‚‚ã®ã¨ã®äº’æ›æ€§ã®ãŸã‚ã€‚
 };
 
 
-//ƒZƒ‹ƒNƒ‰ƒXB’¸“_‚©‚ç‚àì‚ê‚éB–Ê‚Ì•À‚×‘Ö‚¦‚à‚Å‚«‚éB
+//ã‚»ãƒ«ã‚¯ãƒ©ã‚¹ã€‚é ‚ç‚¹ã‹ã‚‰ã‚‚ä½œã‚Œã‚‹ã€‚é¢ã®ä¸¦ã¹æ›¿ãˆã‚‚ã§ãã‚‹ã€‚
 class cell:public p_cell
 {
   public:
 	cell():p_cell(){}
 	cell(INDEX sz):p_cell(sz){}
 	cell(const aINDEX& x):p_cell(x){}
-	cell(const Vector4&, const aVector4&);//’¸“_‚©‚çì‚éB
+	cell(const Vector4&, const aVector4&);//é ‚ç‚¹ã‹ã‚‰ä½œã‚‹ã€‚
 
 	typedef Ary<cell> acell;
-	void F_sort(const acell& edges);//—Å‚ğQÆ‚µ‚È‚ª‚ç–Ê‚Ì—v‘f‚ğ•À‚×‘Ö‚¦‚éB
+	void F_sort(const acell& edges);//ç¨œã‚’å‚ç…§ã—ãªãŒã‚‰é¢ã®è¦ç´ ã‚’ä¸¦ã¹æ›¿ãˆã‚‹ã€‚
 	virtual BOOL read(istream& is);
 	virtual BOOL write(ostream& os) const;
 };

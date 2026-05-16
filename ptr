@@ -1,0 +1,130 @@
+src\cell.cpp:52:	for(j=0;j<n-1;j++)
+src\cell.cpp:74:		(ptr[i])--;
+src\cells.cpp:131:	for(i=0;i<ret->n;i++)
+src\cells.cpp:136:			if(ret->interupt(i*100/(ret->n)))return NULL;
+src\cells.cpp:165:		for(j=0;j<nn-1;j++)
+src\cells.cpp:174:		for(k=0;k<c;k++)if(ed[k][0]==ix[0] && ed[k][1]==ix[nn-1]
+src\cells.cpp:175:						 || ed[k][1]==ix[0] && ed[k][0]==ix[nn-1])goto miss2;
+src\cells.cpp:177:		ed[c][0]=ix[0]; ed[c][1]=ix[nn-1];
+src\cells.cpp:261:					case(0):ptr[ces[i][j]]=-ces[i].n;break;
+src\cells.cpp:262:					case(-1):ptr[ces[i][j]]=ces[i].n;break;
+src\cells.cpp:269:					ptr[ ces[i][j] ] = -1;
+src\cells.cpp:270:				else if( ptr[ ces[i][j] ] < -3)
+src\cells.cpp:271:					ptr[ ces[i][j] ] *= -1;
+src\dirutil.cpp:10:	return std::string(FileName, slash - FileName);
+src\dirutil.cpp:20:	return std::string(start, dot - start);
+src\gl4d.cpp:58:	for(int i=0;i<poly.vertices->n;i++)
+src\gl4d.cpp:62:	vertices3.renew(poly.vertices->n);
+src\gl4d.cpp:65:	for(int i=0;i<poly.Facets->n;i++)
+src\gl4d.cpp:104:			Vector3 v1=vertices3[cface[1]]-vertices3[cface[0]];
+src\gl4d.cpp:105:			Vector3 v2=vertices3[cface[2]]-vertices3[cface[0]];
+src\gl4d.cpp:107:			if(dot(nomal, (viewp-v0))>0)
+src\gl4d.cpp:113:				nomal*=-1.0/norm(nomal);
+src\gl4d.cpp:151:			Vector3 v1=vertices3[cface[1]]-vertices3[cface[0]];
+src\gl4d.cpp:152:			Vector3 v2=vertices3[cface[2]]-vertices3[cface[0]];
+src\gl4d.cpp:161:			if(dot(nomal, (viewp-v0))>0)
+src\gl4d.cpp:167:				nomal*=-1.0/norm(nomal);
+src\glevent.cpp:52:			theta[1]=-(x-xx)*0.005;
+src\glevent.cpp:53:			theta[2]=(y-yy)*0.005;
+src\glevent.cpp:60:			phi[3]=-(x-xx)*0.005;
+src\glevent.cpp:61:			phi[4]=(y-yy)*0.005;
+src\glmain.cpp:16:GLfloat light_position[] = {-4.0, 4.0, 4.0, 0.0};  /* Inite light location. */
+src\glmain.cpp:19:GLdouble clip_plane[4]={1,-1,-1,0};		// extra clip plane
+src\inter.cpp:16:#define SYSTEM__MES app->PumpWaitingMessages();
+src\inter.cpp:18:#define SET_PERCENT(a) SolidGauge->SetValue(a);
+src\inter.cpp:20:#define PERCENT100 SolidGauge->SetValue(100);
+src\inter.cpp:27:	app->PumpWaitingMessages();
+src\inter.cpp:28:	SolidGauge->SetValue(i);
+src\pgen.cpp:1:/* -------------------------------------------------------------------------
+src\pgen.cpp:4: * ---------------------------------------------------------------------- */
+src\pgen.cpp:9:/* -------------------------------------------------------------------------
+src\pgen.cpp:11: * ---------------------------------------------------------------------- */
+src\pgen.cpp:31:	for(i=0;i<p.vertices->n;i++)(*p.vertices)[i]*=ll;
+src\pgen.cpp:32:	p.vertices->edgelength=distance((*p.vertices)[1],(*p.vertices)[2]);
+src\pgen.cpp:86:	p.flag_Facets=new flag(p.Facet_nomals->n);
+src\pgen.cpp:88://	p.flag_faces=new flag(p.fcenter->n);
+src\pgen.cpp:93:/* -------------------------------------------------------------------------
+src\pgen.cpp:95: * ---------------------------------------------------------------------- */
+src\pgen.cpp:115:	for(i=0;i<p.vertices->n;i++)(*p.vertices)[i]*=ll;
+src\pgen.cpp:116:	p.vertices->edgelength=distance((*p.vertices)[1], (*p.vertices)[2]);
+src\pgen.cpp:146:		(*p.Facet_nomals)[c][2]=ln*cos(2.0*M_PI*(j+i%2-1)/n);
+src\pgen.cpp:147:		(*p.Facet_nomals)[c][3]=ln*sin(2.0*M_PI*(j+i%2-1)/n);
+src\pgen.cpp:194:	p.flag_Facets=new flag(p.Facet_nomals->n);
+src\pgen.cpp:196:	p.flag_faces=new flag(p.faces->n);
+src\points.cpp:9:	for(i=0;i<n-1;i++)
+src\polytope.cpp:1:/* -------------------------------------------------------------------------
+src\polytope.cpp:3: * ---------------------------------------------------------------------- */
+src\polytope.cpp:10:#define NONSENCE_INDEX (-1)
+src\polytope.cpp:29:	flag f_v(vertices->n);
+src\polytope.cpp:30:	points new_v(edges->n);
+src\polytope.cpp:31:	cell ix_e(edges->n);
+src\polytope.cpp:36:	for(i=0;i<edges->n;i++)
+src\polytope.cpp:45:			double d0=v0*e[3]-b;
+src\polytope.cpp:46:			double d1=v1*e[3]-b;
+src\polytope.cpp:48:			new_v[new_v.n]=1/(d0-d1)*(d0 * v1 - d1 * v0);
+src\polytope.cpp:55:		ret->vertices=new points(new_v);
+src\polytope.cpp:57:		ret->Facets=new cells(1);
+src\polytope.cpp:58:		(*(ret->Facets))[0].renew(new_v.n);
+src\polytope.cpp:59:		for(i=0;i<ret->Facets->n;i++)(*(ret->Facets))[0][i]=i;
+src\polytope.cpp:61:		ret->Facet_nomals=new points(1);
+src\polytope.cpp:62:		(*(ret->Facet_nomals))[0]=e[3];
+src\polytope.cpp:67:		cells new_e(faces->n);
+src\polytope.cpp:70:		for(int i=0;i<faces_to_edges->n;i++)
+src\polytope.cpp:92:		ret->edges=new cells(new_e);
+src\polytope.cpp:98:		cells new_f(Facets->n);
+src\polytope.cpp:101:		for(int i=0;i<Facets_to_edges->n;i++)
+src\polytope.cpp:121:		ret->faces=new cells(new_f);
+src\polytope.cpp:131:	flag f_v(vertices->n);
+src\polytope.cpp:132:	points new_v(edges->n+vertices->n);
+src\polytope.cpp:133:	cell ix_e(edges->n);
+src\polytope.cpp:134:	cell ix_v(vertices->n);
+src\polytope.cpp:139:	for(i=0;i<edges->n;i++)
+src\polytope.cpp:148:			double d0=v0*e[3]-b;
+src\polytope.cpp:149:			double d1=v1*e[3]-b;
+src\polytope.cpp:151:			new_v[new_v.n]=1/(d0-d1)*(d0 * v1 - d1 * v0);
+src\polytope.cpp:161:	for(i=0;i<vertices->n;i++)
+src\polytope.cpp:171:	ret->vertices=new points(new_v);
+src\polytope.cpp:174:/*	ret->Facets=new cells(1);
+src\polytope.cpp:176:	for(i=0;i<Facets->n;i++)(*Facets)[0][i]=i;
+src\polytope.cpp:185:		cells new_e(faces->n+edges->n);
+src\polytope.cpp:189:		for(int i=0;i<faces_to_edges->n;i++)
+src\polytope.cpp:211:		for(int i=0;i<edges->n;i++)
+src\polytope.cpp:236:		ret->edges=new cells(new_e);
+src\polytope.cpp:241:			cells new_f(Facets->n+faces->n);
+src\polytope.cpp:245:			for(int i=0;i<Facets_to_edges->n;i++)
+src\polytope.cpp:265:			ret->faces=new cells(new_f);
+src\polytope.cpp:281:		vn=vertices->n;
+src\polytope.cpp:286:		for(i=0;i<Facets->n;i++)
+src\polytope.cpp:296:	for(i=0; i<Facets->n-1;i++)
+src\polytope.cpp:301:			if(tfaces.interupt(i*100/Facets->n))return FALSE;
+src\polytope.cpp:307:		for(j=i+1; j<Facets->n;j++)
+src\polytope.cpp:338:	faces->F_sort(*edges);
+src\polytope.cpp:352:		vn=vertices->n;
+src\polytope.cpp:357:		for(i=0;i<Facets->n;i++)
+src\polytope.cpp:366:	for(i=0; i<Facets->n-1;i++)
+src\polytope.cpp:371:			if(tedges.interupt(i*100/Facets->n))return FALSE;
+src\polytope.cpp:377:		for(j=0; j<faces->n;j++)
+src\polytope.cpp:423:/* -------------------------------------------------------------------------
+src\polytope.cpp:425: * ---------------------------------------------------------------------- */
+src\polytope.cpp:446:		flag_vertices=new flag(vertices->n);
+src\polytope.cpp:450:		for(i=0;i<vertices->n;i++)
+src\polytope.cpp:453:		for(i=0;i<vertices->n;i++)
+src\polytope.cpp:455:		vertices->edgelength *=(1.0/l);
+src\polytope.cpp:461://		Parent->SetDocTitle(title,0);
+src\polytope.cpp:488:			flag_faces=new flag(faces->n);
+src\polytope.cpp:501:			flag_Facets=new flag(Facet_nomals->n);
+src\proj.cpp:24:	double n=vp3/(vp3-v3);
+src\proj.cpp:25:	Vector4 pr(v-vp);
+src\p_cell.cpp:54:			return -1;
+src\p_cell.cpp:57:	if(c2.n>c1.n)return -1;
+src\p_cell.cpp:64:	int l=0,u=n-1;
+src\p_cell.cpp:73:			if(u-l<=1)break;
+src\p_cell.cpp:118:	   os<<c.ptr[i]<<" ";
+src\p_cell.cpp:125:	delete [] c.ptr;
+src\p_cell.cpp:126:	c.ptr=new  INDEX[c.n];
+src\p_cell.cpp:127:	for(INDEX i=0;i<c.n;i++){is>>c.ptr[i];}
+src\readp.cpp:89:		if (argv[i][0]=='-')
+src\Vector.cpp:34:				v2.x[j]=-v3.x[i]*sin(th[m])+v3.x[j]*cos(th[m]);
+src\Vector.cpp:58:				x[j]=-v3.x[i]*sin(th[m])+v3.x[j]*cos(th[m]);
+src\vector3.cpp:29:				v2.x[j]=-v3.x[i]*sin(th[m])+v3.x[j]*cos(th[m]);
+src\vector3.cpp:52:				x[j]=-v3.x[i]*sin(th[m])+v3.x[j]*cos(th[m]);

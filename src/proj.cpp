@@ -1,6 +1,6 @@
 /*
-* ‚SŸŒ³‚©‚ç‚RŸŒ³‚Ö‚ÌË‰e‚ÌƒNƒ‰ƒX
-*  ÀŒ»•”
+* ï¼”æ¬¡å…ƒã‹ã‚‰ï¼“æ¬¡å…ƒã¸ã®å°„å½±ã®ã‚¯ãƒ©ã‚¹
+*  å®Ÿç¾éƒ¨
 */
 
 #include"proj.h"
@@ -10,13 +10,13 @@ const stereo stereo::standerd;
 const spherical_projector spherical_projector::standerd;
 
 
-//Šî–{ƒNƒ‰ƒX@³Ë‰e
+//åŸºæœ¬ã‚¯ãƒ©ã‚¹ã€€æ­£å°„å½±
 Vector3 projector::projection(const Vector4& v) const
 {
 	return Vector3(v*ptr[0],v*ptr[1],v*ptr[2]);
 }
 
-//”h¶ƒNƒ‰ƒX@—§‘ÌË‰e
+//æ´¾ç”Ÿã‚¯ãƒ©ã‚¹ã€€ç«‹ä½“å°„å½±
 Vector3 stereo::projection(const Vector4& v) const
 {
 	double vp3=vp*ptr[3];

@@ -1,2 +1,2 @@
-- p_cell , cell �̓���
-- Ary �� vector �ɕς���B
+- p_cell , cell の統合
+- Ary を vector に変える。

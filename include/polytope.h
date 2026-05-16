@@ -1,11 +1,11 @@
 /* -------------------------------------------------------------------------
 
- *	‘½–E‘ÌƒNƒ‰ƒX‚Ìƒwƒbƒ_
+ *	å¤šèƒä½“ã‚¯ãƒ©ã‚¹ã®ãƒ˜ãƒƒãƒ€
 
  *	1996 3 S.yamaguchi
 
-‘½–E‘Ì‚Ì•\¦‚È‚Ç‚Å‹@íˆË‘¶•”‚ğ‚¨‚»‚ç‚­ŠÜ‚Ü‚È‚¢•”•ªB
-ÀÛ‚Ég‚¤‚Æ‚«‚Í‘½dŒp³‚È‚Ç‚Å‹@íˆË‘¶•”‚Æ‚ ‚í‚¹‚éB
+å¤šèƒä½“ã®è¡¨ç¤ºãªã©ã§æ©Ÿç¨®ä¾å­˜éƒ¨ã‚’ãŠãã‚‰ãå«ã¾ãªã„éƒ¨åˆ†ã€‚
+å®Ÿéš›ã«ä½¿ã†ã¨ãã¯å¤šé‡ç¶™æ‰¿ãªã©ã§æ©Ÿç¨®ä¾å­˜éƒ¨ã¨ã‚ã‚ã›ã‚‹ã€‚
  * ---------------------------------------------------------------------- */
 
 #ifndef _POLYTOPE_H
@@ -14,30 +14,33 @@
 #include "cells.h"
 #include "proj.h"
 #include "points.h"
+#include <memory>
 
-//‘½–E‘Ì
+//å¤šèƒä½“
 class polytope
 {
-  public:
+ public:
 	char* name;
-	points* vertices;
-	cells* edges;
-	cells* faces;
-	cells* Facets;
+	std::unique_ptr<points> vertices;
+	std::unique_ptr<cells> edges;
+	std::unique_ptr<cells> faces;
+	std::unique_ptr<cells> Facets;
 
-	points* Facet_nomals;
-	cells* Facets_to_faces;
-	cells* Facets_to_edges;
-	cells* faces_to_edges;
-	flag* flag_Facets;
-	flag* flag_faces;
-	flag* flag_edges;
-	flag* flag_vertices;
+	std::unique_ptr<points> Facet_nomals;
+	std::unique_ptr<cells> Facets_to_faces;
+	std::unique_ptr<cells> Facets_to_edges;
+	std::unique_ptr<cells> faces_to_edges;
+	std::unique_ptr<flag> flag_Facets;
+	std::unique_ptr<flag> flag_faces;
+	std::unique_ptr<flag> flag_edges;
+	std::unique_ptr<flag> flag_vertices;
 
 	polytope();
+	polytope(const polytope&) = delete;
+	polytope& operator=(const polytope&) = delete;
 	virtual ~polytope();
 
-	//===================		 “ü—ÍŠÖ”
+	//===================		 å…¥åŠ›é–¢æ•°
 	BOOL read_vertices(istream& is);
 	BOOL read_Facet_nomals(istream& is);
 	BOOL read_faces(istream& is);
@@ -45,7 +48,7 @@ class polytope
 	
 	void load_base(char*);
 
-	//========================	   —v‘f‚ğ¶¬‚·‚éŠÖ”
+	//========================	   è¦ç´ ã‚’ç”Ÿæˆã™ã‚‹é–¢æ•°
 	BOOL make__Facets();
 	BOOL make__Facets_to_faces();
 	BOOL make__Facets_to_edges();
@@ -54,11 +57,11 @@ class polytope
 	BOOL make_edges_from_Facets_and_faces();
 	BOOL make__edges_from_vertices();
 
-	//‘½–E‘Ì‚ğ‰ÁH‚·‚éŠÖ”
+	//å¤šèƒä½“ã‚’åŠ å·¥ã™ã‚‹é–¢æ•°
 	polytope* slice(const aVector4&, double);
 	polytope* cut(const aVector4&, double, BOOL include_slice=FALSE);
 
-	//‚RŸŒ³ƒf[ƒ^‚ğo—Í‚·‚éB
+	//ï¼“æ¬¡å…ƒãƒ‡ãƒ¼ã‚¿ã‚’å‡ºåŠ›ã™ã‚‹ã€‚
 
 	BOOL pov_blob(ostream& os, const projector& ev=projector::standerd);
 	BOOL pov_cylinder(ostream& os, const projector& ev=projector::standerd);
@@ -68,95 +71,74 @@ class polytope
 
 inline polytope::polytope()
 {
-	vertices=NULL;
-	edges=NULL;
-	faces=NULL;
-	Facets=NULL;
-	Facets_to_faces=NULL;
-	Facets_to_edges=NULL;
-	faces_to_edges=NULL;
-	flag_Facets=NULL;
-	flag_faces=NULL;
-	flag_edges=NULL;
-	flag_vertices=NULL;
+	name=NULL;
 }
 
-//===================		 “ü—ÍŠÖ”
+//===================		 å…¥åŠ›é–¢æ•°
 inline BOOL polytope::read_vertices(istream& is)
 {
-	delete vertices;
-	vertices=new points();
+	vertices.reset(new points());
 	is>>(*vertices);
 	return TRUE;
 }
 
 inline BOOL polytope::read_Facet_nomals(istream& is)
 {
-	delete Facet_nomals;
-	Facet_nomals=new points();
+	Facet_nomals.reset(new points());
 	is>>(*Facet_nomals);
 	return TRUE;
 }
 
 inline BOOL polytope::read_faces(istream& is)
 {
-	delete faces;
-	faces=new cells();
+	faces.reset(new cells());
 	is>>(*faces);
 	return TRUE;
 }
 
 inline BOOL polytope::read_Facets(istream& is)
 {
-	delete Facets;
-	Facets=new cells();
+	Facets.reset(new cells());
 	is>>(*Facets);
 	return TRUE;
 }
 
 
-//========================	   —v‘f‚ğ¶¬‚·‚éŠÖ”
+//========================	   è¦ç´ ã‚’ç”Ÿæˆã™ã‚‹é–¢æ•°
 inline BOOL polytope::make__Facets()
 {
 	if((!vertices) || (!Facet_nomals))return FALSE;
-	delete Facets;
-	Facets=new cells(*Facet_nomals, *vertices);
-	delete flag_Facets;
-	flag_Facets=new flag(Facets->n);
+	Facets.reset(new cells(*Facet_nomals, *vertices));
+	flag_Facets.reset(new flag(Facets->n));
 	return TRUE;
 }
 
 inline BOOL polytope::make__Facets_to_faces()
 {
 	if((!Facets) || (!faces))return FALSE;
-	delete Facets_to_faces;
-	Facets_to_faces=new cells(*faces, *Facets);
+	Facets_to_faces.reset(new cells(*faces, *Facets));
 	return TRUE;
 }
 
 inline BOOL polytope::make__Facets_to_edges()
 {
 	if((!Facets) || (!edges))return FALSE;
-	delete Facets_to_edges;
-	Facets_to_edges=new cells(*edges, *Facets);
+	Facets_to_edges.reset(new cells(*edges, *Facets));
 	return TRUE;
 }
 
 inline BOOL polytope::make__faces_to_edges()
 {
 	if((!faces) || (!edges))return FALSE;
-	delete faces_to_edges;
-	faces_to_edges=new cells(*edges, *faces);
+	faces_to_edges.reset(new cells(*edges, *faces));
 	return TRUE;
 }
 
 inline BOOL polytope::make__edges_from_vertices()
 {
 	if(!vertices)return FALSE;
-	delete edges;
-	edges=vertices->edges_of_unit_length();
-	delete flag_edges;
-	flag_edges=new flag(edges->n);
+	edges.reset(vertices->edges_of_unit_length());
+	flag_edges.reset(new flag(edges->n));
 	return TRUE;
 }
 

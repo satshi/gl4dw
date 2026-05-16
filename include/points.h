@@ -3,7 +3,7 @@
 
 #include "cells.h"
 
-//“_‚ÌW‡
+//ç‚¹ã®é›†åˆ
 class points:public aVector4
 {
   public:
@@ -14,12 +14,12 @@ class points:public aVector4
 	points(int nn):aVector4(nn){}
 	points(const aVector4& vx):aVector4(vx){}
 
-	//“¯‚¶’·‚³‚Ì—Å‚ğì‚éB
+	//åŒã˜é•·ã•ã®ç¨œã‚’ä½œã‚‹ã€‚
 	cells* edges_of_unit_length();
-	//‰ñ“]‚·‚é
+	//å›è»¢ã™ã‚‹
 	void rotation(double* th);
 	
-	//“üo—Í‚Ég‚¤ŠÖ”‚ğƒI[ƒo[ƒ‰ƒCƒh
+	//å…¥å‡ºåŠ›ã«ä½¿ã†é–¢æ•°ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰
 	BOOL read(istream&);
 	BOOL write(ostream&) const;
 };

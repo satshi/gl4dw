@@ -13,26 +13,26 @@ class cells:public acell
 	cells(INDEX n):acell(n){}
 	cells(const acell& ac):acell(ac){}
 	
-	//�Z���̒��S�ƒ��_
+	//セルの中心と頂点
 	cells(const aVector4& center, const aVector4& vx);
 
-	//��ʂ̃Z���Ɖ��ʂ̃Z��
+	//上位のセルと下位のセル
 	cells(const acell& c1, const acell& c2,int vn=0);
 	
-	//�֐�
-	//���בւ��B�ʂ̃f�[�^�̏ꍇ���Ԃ���בւ���
+	//関数
+	//並べ替え。面のデータの場合順番を並べ替える
 	void F_sort(const acell&);
-	//�t�ɉ����B���Ƃ��Ζʂɑ����钸�_�̃f�[�^����A
-	//���_���܂ޖʂ̃f�[�^�����B�o�ΐ}�`���l����Ƃ��ɗL��
-	void inverse(const acell&);//������V������蒼���B
-	cells* inverse() const;//�V�����I�u�W�F�N�g������ă|�C���^��Ԃ��B
+	//逆に解く。たとえば面に属する頂点のデータから、
+	//頂点を含む面のデータを作る。双対図形を考えるときに有効
+	void inverse(const acell&);//自分を新しく作り直す。
+	cells* inverse() const;//新しいオブジェクトを作ってポインタを返す。
 	
-	//�ʂ���ł����
+	//面から稜を作る
 	cells* break_face();
 	
-	//������Ƃ𒆒f���邽�߂̊֐��B
-	//���f����Ƃ���TRUE���������B
-	//���C�u�����̒��ł͒�`����Ȃ��ŕʓr�\�[�X�����B
+	//長い作業を中断するための関数。
+	//中断するときはTRUEをかえす。
+	//ライブラリの中では定義されないで別途ソースを作る。
 	//inter.cpp
 	virtual BOOL interupt(int i);
 	virtual BOOL write(ostream& os) const;
@@ -41,20 +41,20 @@ class cells:public acell
 class flag:public aINDEX
 {
   public:
-	//�R���X�g���N�^
+	//コンストラクタ
 	flag():aINDEX(){}
 	flag(int n):aINDEX(n){};
 
-	//�֐�
-	//�Z���̖@���x�N�g���i���S�̃x�N�g���j��^���A
-	//����Vector4&�ƂȂ��p���X�O�x�����̂��̂��Ƃ�
+	//関数
+	//セルの法線ベクトル（中心のベクトル）を与え、
+	//そのVector4&となす角が９０度未満のものをとる
 	void gen(const Vector4&, const aVector4&, double b=0);
 
-	//��ʂ̃Z�������`������
+	//上位のセルから遺伝させる
 	void gen_from(const cells&, const flag&);
 	void gen_surface(const cells&, const flag&);
 
-	//�\�ʂ̖E����
+	//表面の胞だけ
 	void gen_up(const cells&,const flag&);
 };
 

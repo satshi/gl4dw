@@ -42,8 +42,7 @@ BOOL points::read(istream& is)
 {
 	is>>n;
 	is>>edgelength;
-	delete[] ptr;
-	ptr=new Vector4[n];
+	renew(n);
 	for(int i=0;i<n;i++)
 	{
 		is>>ptr[i];

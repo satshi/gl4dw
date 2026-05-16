@@ -11,26 +11,26 @@
 #include<iostream.h>
 #include"dust.h"
 
-//	****************	‚RŸŒ³ƒxƒNƒgƒ‹‚ÌƒNƒ‰ƒX		**********
+//	****************	ï¼“æ¬¡å…ƒãƒ™ã‚¯ãƒˆãƒ«ã®ã‚¯ãƒ©ã‚¹		**********
 class Vector3
 {
 	public:
 	double x[3];
 
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^[
+	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ãƒ¼
 	Vector3();
 	Vector3(double,double,double);
 	Vector3(const Vector3&);
 
-	//‰‰Zq
+	//æ¼”ç®—å­
 	friend Vector3 operator+(const Vector3&,const Vector3&);
 	friend Vector3 operator-(const Vector3&,const Vector3&);
-	friend Vector3 operator*(double,const Vector3&);//ƒXƒJƒ‰[”{
-	friend Vector3 operator*(const Vector3&,double);//ƒXƒJƒ‰[”{
-	friend double  operator*(const Vector3&,const Vector3&); //“àÏ
-	friend double  dot(const Vector3&,const Vector3&); //“àÏ
-	friend Vector3 operator/(const Vector3&,const Vector3&); //ƒxƒNƒgƒ‹Ï
-	friend Vector3 cross(const Vector3&,const Vector3&); //ƒxƒNƒgƒ‹Ï
+	friend Vector3 operator*(double,const Vector3&);//ã‚¹ã‚«ãƒ©ãƒ¼å€
+	friend Vector3 operator*(const Vector3&,double);//ã‚¹ã‚«ãƒ©ãƒ¼å€
+	friend double  operator*(const Vector3&,const Vector3&); //å†…ç©
+	friend double  dot(const Vector3&,const Vector3&); //å†…ç©
+	friend Vector3 operator/(const Vector3&,const Vector3&); //ãƒ™ã‚¯ãƒˆãƒ«ç©
+	friend Vector3 cross(const Vector3&,const Vector3&); //ãƒ™ã‚¯ãƒˆãƒ«ç©
 
 	Vector3& operator=(const Vector3&);
 	Vector3& operator+=(const Vector3&);
@@ -48,20 +48,20 @@ class Vector3
 	}
 	
 
-	//ŠÖ”
-	double norm() const;//	’·‚³
-	friend double norm(const Vector3&);//  ’·‚³
-	friend double distance(const Vector3&, const Vector3&);//‹——£
-	friend Vector3 rotation(double* /* Šp“x‚Ì”z—ñ‚RŒÂ‚Ì¬•ª*/,Vector3&);
-	void rotation(double* /* Šp“x‚Ì”z—ñ‚RŒÂ‚Ì¬•ª*/);
-	//‰ñ“]
+	//é–¢æ•°
+	double norm() const;//	é•·ã•
+	friend double norm(const Vector3&);//  é•·ã•
+	friend double distance(const Vector3&, const Vector3&);//è·é›¢
+	friend Vector3 rotation(double* /* è§’åº¦ã®é…åˆ—ï¼“å€‹ã®æˆåˆ†*/,Vector3&);
+	void rotation(double* /* è§’åº¦ã®é…åˆ—ï¼“å€‹ã®æˆåˆ†*/);
+	//å›è»¢
 };
-//	--------	ƒXƒgƒŠ[ƒ€“üo—Í	-----------
+//	--------	ã‚¹ãƒˆãƒªãƒ¼ãƒ å…¥å‡ºåŠ›	-----------
 ostream& operator<<(ostream&,Vector3&);
 istream& operator>>(istream&,Vector3&);
 
-//ƒCƒ“ƒ‰ƒCƒ“ŠÖ”
-//		ƒRƒ“ƒXƒgƒ‰ƒNƒ^[
+//ã‚¤ãƒ³ãƒ©ã‚¤ãƒ³é–¢æ•°
+//		ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ãƒ¼
 inline Vector3::Vector3()
 {
 	x[0]=0;
@@ -83,7 +83,7 @@ inline Vector3::Vector3(const Vector3& v)
 	x[2]=v.x[2];
 }
 
-//		************	‰‰Zq		************
+//		************	æ¼”ç®—å­		************
 inline Vector3 operator+(const Vector3& v1,const Vector3& v2)
 {
 	return Vector3(v1.x[0]+v2.x[0], v1.x[1]+v2.x[1], v1.x[2]+v2.x[2]);
@@ -95,39 +95,39 @@ inline Vector3 operator-(const Vector3& v1, const Vector3& v2)
 	return Vector3(v1.x[0]-v2.x[0], v1.x[1]-v2.x[1], v1.x[2]-v2.x[2]);
 }
 
-//	ƒXƒJƒ‰[”{
+//	ã‚¹ã‚«ãƒ©ãƒ¼å€
 inline Vector3 operator*(double k, const Vector3& v2)
 {
 	return Vector3(k*(v2.x[0]), k*(v2.x[1]),k*(v2.x[2]));
 }
 
-//	ƒXƒJƒ‰[”{
+//	ã‚¹ã‚«ãƒ©ãƒ¼å€
 inline Vector3 operator*(const Vector3& v2,double k)
 {
 	return Vector3(k*(v2.x[0]), k*(v2.x[1]),k*(v2.x[2]));
 }
 
 
-inline double operator*(const Vector3& v1, const Vector3& v2) //@“àÏiƒXƒJƒ‰[Ïj
+inline double operator*(const Vector3& v1, const Vector3& v2) //ã€€å†…ç©ï¼ˆã‚¹ã‚«ãƒ©ãƒ¼ç©ï¼‰
 {
 	
 	return (v1.x[0])*(v2.x[0]) + (v1.x[1])*(v2.x[1]) + (v1.x[2])*(v2.x[2]);
 }
 
-inline double dot(const Vector3& v1, const Vector3& v2) //@“àÏiƒXƒJƒ‰[Ïj
+inline double dot(const Vector3& v1, const Vector3& v2) //ã€€å†…ç©ï¼ˆã‚¹ã‚«ãƒ©ãƒ¼ç©ï¼‰
 {
 	
 	return (v1.x[0])*(v2.x[0]) + (v1.x[1])*(v2.x[1]) + (v1.x[2])*(v2.x[2]);
 }
 
-inline Vector3 operator/(const Vector3& v1, const Vector3& v2)	//@ŠOÏiƒxƒNƒgƒ‹Ïj
+inline Vector3 operator/(const Vector3& v1, const Vector3& v2)	//ã€€å¤–ç©ï¼ˆãƒ™ã‚¯ãƒˆãƒ«ç©ï¼‰
 {
 	return Vector3((v1.x[1]) * (v2.x[2]) - (v1.x[2]) * (v2.x[1]),
 			   (v1.x[2]) * (v2.x[0]) - (v1.x[0]) * (v2.x[2]),
 			   (v1.x[0]) * (v2.x[1]) - (v1.x[1]) * (v2.x[0]));
 }
 
-inline Vector3 cross(const Vector3& v1, const Vector3& v2)	//@ŠOÏiƒxƒNƒgƒ‹Ïj
+inline Vector3 cross(const Vector3& v1, const Vector3& v2)	//ã€€å¤–ç©ï¼ˆãƒ™ã‚¯ãƒˆãƒ«ç©ï¼‰
 {
 	return Vector3((v1.x[1]) * (v2.x[2]) - (v1.x[2]) * (v2.x[1]),
 			   (v1.x[2]) * (v2.x[0]) - (v1.x[0]) * (v2.x[2]),
@@ -158,7 +158,7 @@ inline Vector3& Vector3::operator-=(const Vector3& v1)
 	return *this;
 }
 
-//	ƒXƒJƒ‰[”{
+//	ã‚¹ã‚«ãƒ©ãƒ¼å€
 inline Vector3& Vector3::operator*=(double k)
 {
 	x[0]*=k;
@@ -175,7 +175,7 @@ inline Vector3& Vector3::operator/=(double k)
 	return *this;
 }
 
-// ƒxƒNƒgƒ‹‚Ìƒmƒ‹ƒ€i’·‚³j‚ğ‹‚ß‚é
+// ãƒ™ã‚¯ãƒˆãƒ«ã®ãƒãƒ«ãƒ ï¼ˆé•·ã•ï¼‰ã‚’æ±‚ã‚ã‚‹
 inline double Vector3::norm() const
 {
 	return sqrt(x[0]*x[0] + x[1]*x[1] + x[2]*x[2]);
@@ -185,14 +185,14 @@ inline double norm(const Vector3& v)
 {
 	return v.norm();
 }
-// ‚Q‚Â‚ÌƒxƒNƒgƒ‹i“_j‚ÌŠÔ‚Ì‹——£‚ğ‹‚ß‚é
+// ï¼’ã¤ã®ãƒ™ã‚¯ãƒˆãƒ«ï¼ˆç‚¹ï¼‰ã®é–“ã®è·é›¢ã‚’æ±‚ã‚ã‚‹
 inline double distance(const Vector3& v1, const Vector3& v2)
 {
 	return (v1-v2).norm();
 }
 
 
-//	--------	ƒXƒgƒŠ[ƒ€“üo—Í	----------
+//	--------	ã‚¹ãƒˆãƒªãƒ¼ãƒ å…¥å‡ºåŠ›	----------
 inline ostream& operator<<(ostream& os, Vector3& v)
 {
 	return(os<<v.x[0]<<" "<<v.x[1]<<" "
