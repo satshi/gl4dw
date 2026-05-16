@@ -1,40 +1,21 @@
-/* -------------------------------------------------------------------------
- *	ファイル名の操作
- * ---------------------------------------------------------------------- */
 #include "dirutil.h"
+
 #include <string.h>
 
-//ファイルネーム（フルパス）からディレクトリーを求める。
-char* Directory(char* FileName)
+std::string Directory(const char* FileName)
 {
-	int n;
-	static char dir[256];
+	const char* slash = strrchr(FileName, '\\');
+	if(!slash) return std::string();
 
-	for(n=strlen(FileName);FileName[n]!='\\';n--){}
-	n--;
-
-	for(;n>=0;n--)
-	{
-		dir[n]=FileName[n];
-	}
-	return dir;
+	return std::string(FileName, slash - FileName);
 }
 
-//ファイルネーム（フルパス）から
-//ディレクトリ、拡張子ものぞいた名前を求める。
-char* filename(char* FileName)
+std::string filename(const char* FileName)
 {
-	int i=0,n;
-	static char fn[256];
+	const char* slash = strrchr(FileName, '\\');
+	const char* start = slash ? slash + 1 : FileName;
+	const char* dot = strrchr(start, '.');
 
-	for(n=strlen(FileName);FileName[n]!='\\';n--){}
-
-	n++;
-	while(FileName[n+i]!='.')
-	{
-		fn[i++]=FileName[n+i];
-	}
-	fn[i]=0;
-	return fn;
+	if(!dot) return std::string(start);
+	return std::string(start, dot - start);
 }
-

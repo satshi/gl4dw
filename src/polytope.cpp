@@ -6,6 +6,7 @@
 #include <fstream.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string>
 #define NONSENCE_INDEX (-1)
 #define message(A)
 
@@ -424,7 +425,7 @@ BOOL polytope::make_edges_from_Facets_and_faces()
  * ---------------------------------------------------------------------- */
 void polytope::load_base(char* fname)
 {
-	char* dir;
+	std::string dir;
 	int i;
 	ifstream is(fname);
 
@@ -453,7 +454,9 @@ void polytope::load_base(char* fname)
 			(*vertices)[i]*=(1.0/l);
 		vertices->edgelength *=(1.0/l);
 		//タイトル、データのディレクトリーなどを設定する。
-		name=filename(fname);
+		static std::string loaded_name;
+		loaded_name=filename(fname);
+		name=(char*)loaded_name.c_str();
 		dir=Directory(fname);
 //		Parent->SetDocTitle(title,0);
 
@@ -472,9 +475,8 @@ void polytope::load_base(char* fname)
 		//面のデータを読み込む。
 		//ファイルネームは頂点のデータの頭にfをつけて
 		//拡張子をcelにしたもの
-		char tmp_name[256];
-		sprintf(tmp_name,"%s\\f%s.cel",dir,name);
-		ifstream is2(tmp_name);
+		std::string tmp_name=dir + "\\f" + name + ".cel";
+		ifstream is2(tmp_name.c_str());
 		if (!is)
 		{
 			return;
@@ -488,11 +490,11 @@ void polytope::load_base(char* fname)
 
 		//胞の中心のデータを読み込む。
 		//ファイルネームは頂点のデータから読み込む。
-		char ccfile[256];
+		std::string ccfile;
 		is>>ccfile;
-		sprintf(tmp_name,"%s\\%s",dir,ccfile);
+		tmp_name=dir + "\\" + ccfile;
 		is.close();
-		is.open(tmp_name);
+		is.open(tmp_name.c_str());
 		read_Facet_nomals(is);
 		if(Facet_nomals)
 		{
@@ -502,8 +504,8 @@ void polytope::load_base(char* fname)
 		//ファイルネームは頂点のデータの頭にcをつけて
 		//拡張子をcelにしたもの
 		//もしファイルがなければ何もしない。
-		sprintf(tmp_name,"%s\\c%s.cel",dir,name);
-		ifstream is(tmp_name);
+		tmp_name=dir + "\\c" + name + ".cel";
+		ifstream is(tmp_name.c_str());
 		if(is)
 		{
 			delete Facets;

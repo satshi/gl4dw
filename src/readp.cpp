@@ -16,7 +16,7 @@ extern double clip_plane[];
 extern int Clip;
 extern int hidePoly;
 extern int FillType;
-extern char data_dir[];
+extern std::string data_dir;
 extern char *window_name;
 extern char *name;
 
@@ -39,12 +39,10 @@ static void read_bool_or_int(const nlohmann::json& config, const char* key, int&
 	}
 }
 
-static void read_string_to_buffer(const nlohmann::json& config, const char* key, char* dest, size_t dest_size)
+static void read_string(const nlohmann::json& config, const char* key, std::string& value)
 {
-	if(!has_key(config, key) || dest_size == 0) return;
-	std::string value = config.at(key).get<std::string>();
-	strncpy(dest, value.c_str(), dest_size - 1);
-	dest[dest_size - 1] = '\0';
+	if(!has_key(config, key)) return;
+	value = config.at(key).get<std::string>();
 }
 
 void read_param()
@@ -62,7 +60,7 @@ void read_param()
 		if(has_key(config, "extendRate")) ExtendRate = config.at("extendRate").get<double>();
 		read_bool_or_int(config, "clip", Clip);
 		if(has_key(config, "fillType")) FillType = config.at("fillType").get<int>();
-		read_string_to_buffer(config, "dataDir", data_dir, 1024);
+		read_string(config, "dataDir", data_dir);
 
 		if(has_key(config, "clipPlane"))
 		{

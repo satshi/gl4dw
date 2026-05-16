@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <GL/glut.h>
 #include <windows.h>
+#include <string>
 #include "gl4d.h"
 #include "glevent.h"
 #include "readp.h"
@@ -94,9 +95,8 @@ int main(int argc, char** argv)
 	//glutGameModeString("640x480:16@60");
 	//glutEnterGameMode();
 	int window_id = glutCreateWindow(window_name);
-	char logbuf[128];
-	sprintf(logbuf, "main: glutCreateWindow id=%d", window_id);
-	log_step(logbuf);
+	std::string logbuf = std::string("main: glutCreateWindow id=") + std::to_string(window_id);
+	log_step(logbuf.c_str());
 	glutShowWindow();
 	glutPostRedisplay();
 	// ƒCƒxƒ“ƒgˆ—ŠÖ”

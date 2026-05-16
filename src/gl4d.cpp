@@ -4,68 +4,64 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <string>
 
 polytope poly;
 
 Ary<Vector3> vertices3;
 projector proj;
 Vector3 viewp(0.0, 0.0, 3.5);
-char data_dir[1024]="data";
+std::string data_dir = "data";
 int hidePoly=0;
 double ExtendRate=0.06;
-static int open_data_file(ifstream& is, char* fname, const char* pattern, const char* name)
+
+static int open_data_file(ifstream& is, std::string& fname, const std::string& file_name)
 {
 	if(is.is_open()) is.close();
-	sprintf(fname, pattern, data_dir, name);
-	is.open(fname, ios::in);
-	if(!is && !strcmp(data_dir, "data"))
+	fname = data_dir + "\\" + file_name;
+	is.open(fname.c_str(), ios::in);
+	if(!is && data_dir == "data")
 	{
 		is.clear();
-		sprintf(fname, pattern, "..\\data", name);
-		is.open(fname, ios::in);
+		fname = std::string("..\\data\\") + file_name;
+		is.open(fname.c_str(), ios::in);
 	}
 	return !!is;
 }
 
 int ReadPolytope(char* pname)
 {
-	char fname[1024];
-	char ccfname[1024];
+	std::string fname;
+	std::string ccfname;
 	
-	// 頂点の読み込み
 	ifstream is;
-	if(!open_data_file(is, fname, "%s\\%s.poi", pname))
+	if(!open_data_file(is, fname, std::string(pname) + ".poi"))
 	{
 		cerr<<"Cannot open file"<<fname<<endl;
 		return 0;
 	}
 	poly.read_vertices(is);
 	is>>ccfname;
-	// 面の読み込み
-	if(!open_data_file(is, fname, "%s\\f%s.cel", pname))
+	if(!open_data_file(is, fname, std::string("f") + pname + ".cel"))
 	{
 		cerr<<"Cannot open file"<<fname<<endl;
 		return 0;
 	}
 	poly.read_faces(is);
-	// 胞の中心の読み込み。
-	if(!open_data_file(is, fname, "%s\\%s", ccfname))
+	if(!open_data_file(is, fname, ccfname))
 	{
 		cerr<<"Cannot open file"<<fname<<endl;
 		return 0;
 	}
 	poly.read_Facet_nomals(is);
-	// スケールの調整
 	double l=1.0/(*poly.vertices)[0].norm();
 	for(int i=0;i<poly.vertices->n;i++)
 	{
 		(*poly.vertices)[i]*=l;
 	}
 	vertices3.renew(poly.vertices->n);
-	// データの作成
 	poly.make__Facets();
 	poly.make__Facets_to_faces();
-	// 胞の中心の調整
 	for(int i=0;i<poly.Facets->n;i++)
 	{
 		Vector4& cv=(*poly.Facet_nomals)[i];
@@ -93,7 +89,6 @@ void drawPolytopeSolid(void)
 	
 	for(k=0;k<ff.n;k++)
 	if( dot(proj[3],(*poly.Facet_nomals)[k])>0
-//	if( (*poly.Facet_nomals)[k][3]>=0.3		
 		&& ff[k].n !=hidePoly)
 	{
 		if(ff[k].n!=prevn)
@@ -188,4 +183,3 @@ void drawPolytopeFrame(void)
 		}
 	}
 }
-

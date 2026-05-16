@@ -1,7 +1,6 @@
-/* -------------------------------------------------------------------------
- *	ファイルネームの操作に使う
- * ---------------------------------------------------------------------- */
+#pragma once
 
+#include <string>
 
-char* Directory(char* FileName);
-char* filename(char* FileName);
+std::string Directory(const char* FileName);
+std::string filename(const char* FileName);

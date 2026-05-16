@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cstring>
+#include <string>
 
 int Width = 640;
 double ExtendRate = 0.06;
@@ -7,7 +8,7 @@ double clip_plane[] = {1.0, -1.0, -1.0, 0.0};
 int Clip = 0;
 int hidePoly = 0;
 int FillType = 0;
-char data_dir[1024] = "data";
+std::string data_dir = "data";
 char* window_name = (char*)"gl4dw";
 char* name = (char*)"c8";
 
@@ -24,7 +25,7 @@ int main()
     read_param();
     remove("gl4d.json");
 
-    if(strcmp(data_dir, "data") != 0) return 2;
+    if(data_dir != "data") return 2;
     if(Width != 800) return 3;
     if(ExtendRate != 0.12) return 4;
     if(Clip != 1) return 5;
