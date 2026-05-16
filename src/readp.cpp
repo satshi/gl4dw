@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <fstream>
+#include <iostream>
+#include <nlohmann/json.hpp>
+#include <stdexcept>
+#include <string>
 #include "vector3.h"
-#include "string.h"
 
-char* cfg_file=(char*)"gl4d.cfg";
-char* delimita=(char*)" ,=\n";
-#define MAXLINE 256
+char* cfg_file=(char*)"gl4d.json";
 
 extern int Width;
 extern double ExtendRate;
@@ -18,58 +20,70 @@ extern char data_dir[];
 extern char *window_name;
 extern char *name;
 
+static bool has_key(const nlohmann::json& config, const char* key)
+{
+	return config.find(key) != config.end();
+}
+
+static void read_bool_or_int(const nlohmann::json& config, const char* key, int& value)
+{
+	if(!has_key(config, key)) return;
+	const nlohmann::json& item = config.at(key);
+	if(item.is_boolean())
+	{
+		value = item.get<bool>() ? 1 : 0;
+	}
+	else
+	{
+		value = item.get<int>();
+	}
+}
+
+static void read_string_to_buffer(const nlohmann::json& config, const char* key, char* dest, size_t dest_size)
+{
+	if(!has_key(config, key) || dest_size == 0) return;
+	std::string value = config.at(key).get<std::string>();
+	strncpy(dest, value.c_str(), dest_size - 1);
+	dest[dest_size - 1] = '\0';
+}
+
 void read_param()
 {
-	FILE* fp;
-	char line[MAXLINE];
-	fp=fopen(cfg_file, "r");
-	if (!fp) return;
-	while(NULL!=fgets(line, MAXLINE, fp))
+	std::ifstream is(cfg_file);
+	if(!is) return;
+
+	try
 	{
-		char* keyword=strtok(line, delimita);
-		if(!keyword || keyword[0]=='#') continue;
-		if(!strcmp(keyword,"hidePoly") )
+		nlohmann::json config;
+		is >> config;
+
+		if(has_key(config, "hidePoly")) hidePoly = config.at("hidePoly").get<int>();
+		if(has_key(config, "width")) Width = config.at("width").get<int>();
+		if(has_key(config, "extendRate")) ExtendRate = config.at("extendRate").get<double>();
+		read_bool_or_int(config, "clip", Clip);
+		if(has_key(config, "fillType")) FillType = config.at("fillType").get<int>();
+		read_string_to_buffer(config, "dataDir", data_dir, 1024);
+
+		if(has_key(config, "clipPlane"))
 		{
-			char* value=strtok(NULL, delimita);
-			if(value) hidePoly=atoi(value);
-		}
-		else if(!strcmp(keyword,"Width"))
-		{
-			char* value=strtok(NULL, delimita);
-			if(value) Width=atoi(value);
-		}
-		else if(!strcmp(keyword,"ExtendRate") )
-		{
-			char* value=strtok(NULL, delimita);
-			if(value) ExtendRate=atof(value);
-		}
-		else if(!strcmp(keyword,"ClipPlane") )
-		{
+			const nlohmann::json& plane = config.at("clipPlane");
+			if(!plane.is_array() || plane.size() != 4)
+			{
+				throw std::runtime_error("clipPlane must be an array of four numbers");
+			}
 			for(int i=0;i<4;i++)
 			{
-				char* value=strtok(NULL, delimita);
-				if(value) clip_plane[i]=atof(value);
+				clip_plane[i] = plane.at(i).get<double>();
 			}
 		}
-		else if(!strcmp(keyword,"Clip") )
-		{
-			char* value=strtok(NULL, delimita);
-			if(value) Clip=atoi(value);
-		}
-		else if(!strcmp(keyword,"FillType") )
-		{
-			char* value=strtok(NULL, delimita);
-			if(value) FillType=atoi(value);
-		}
-		else if(!strcmp(keyword,"DataDir") )
-		{
-			char* value=strtok(NULL, delimita);
-			if(value) strcpy(data_dir, value);
-		}
-
 	}
-	fclose(fp);
-}void read_comandline(int argc, char** argv)
+	catch(const std::exception& e)
+	{
+		std::cerr << "Cannot read config file " << cfg_file << ": " << e.what() << std::endl;
+	}
+}
+
+void read_comandline(int argc, char** argv)
 {
 	int i;
 	for(i=1;i<argc;i++)

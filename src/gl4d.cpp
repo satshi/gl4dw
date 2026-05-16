@@ -10,7 +10,7 @@ polytope poly;
 Ary<Vector3> vertices3;
 projector proj;
 Vector3 viewp(0.0, 0.0, 3.5);
-char data_dir[]="data";
+char data_dir[1024]="data";
 int hidePoly=0;
 double ExtendRate=0.06;
 static int open_data_file(ifstream& is, char* fname, const char* pattern, const char* name)
@@ -37,7 +37,7 @@ int ReadPolytope(char* pname)
 	if(!open_data_file(is, fname, "%s\\%s.poi", pname))
 	{
 		cerr<<"Cannot open file"<<fname<<endl;
-		exit(1);
+		return 0;
 	}
 	poly.read_vertices(is);
 	is>>ccfname;
@@ -45,14 +45,14 @@ int ReadPolytope(char* pname)
 	if(!open_data_file(is, fname, "%s\\f%s.cel", pname))
 	{
 		cerr<<"Cannot open file"<<fname<<endl;
-		exit(1);
+		return 0;
 	}
 	poly.read_faces(is);
 	// 胞の中心の読み込み。
 	if(!open_data_file(is, fname, "%s\\%s", ccfname))
 	{
 		cerr<<"Cannot open file"<<fname<<endl;
-		exit(1);
+		return 0;
 	}
 	poly.read_Facet_nomals(is);
 	// スケールの調整

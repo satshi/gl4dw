@@ -9,6 +9,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+find_package(nlohmann_json CONFIG REQUIRED)
+
 add_library(gl4dw_core STATIC
   src/cell.cpp
   src/cells.cpp
@@ -33,6 +35,13 @@ endif()
 if(GL4DW_BUILD_SMOKE_TEST)
   add_executable(gl4dw_smoke tests/smoke_test.cpp)
   target_link_libraries(gl4dw_smoke PRIVATE gl4dw_core)
+
+  add_executable(gl4dw_config_smoke
+    tests/config_smoke.cpp
+    src/readp.cpp
+  )
+  target_include_directories(gl4dw_config_smoke PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+  target_link_libraries(gl4dw_config_smoke PRIVATE nlohmann_json::nlohmann_json)
 endif()
 
 if(GL4DW_BUILD_VIEWER)
@@ -46,9 +55,16 @@ if(GL4DW_BUILD_VIEWER)
         src/gl4d.cpp
       )
       target_link_libraries(gl4dw_data_smoke PRIVATE gl4dw_core OpenGL::GL OpenGL::GLU GLUT::GLUT)
+      add_executable(gl4dw_readpolytope_failure
+        tests/readpolytope_failure.cpp
+        src/gl4d.cpp
+      )
+      target_link_libraries(gl4dw_readpolytope_failure PRIVATE gl4dw_core OpenGL::GL OpenGL::GLU GLUT::GLUT)
       if(MSVC)
         target_compile_definitions(gl4dw_data_smoke PRIVATE _CRT_SECURE_NO_WARNINGS)
         target_compile_options(gl4dw_data_smoke PRIVATE /permissive- /W3)
+        target_compile_definitions(gl4dw_readpolytope_failure PRIVATE _CRT_SECURE_NO_WARNINGS)
+        target_compile_options(gl4dw_readpolytope_failure PRIVATE /permissive- /W3)
       endif()
     endif()
 
@@ -58,7 +74,7 @@ if(GL4DW_BUILD_VIEWER)
       src/glmain.cpp
       src/readp.cpp
     )
-    target_link_libraries(gl4dw PRIVATE gl4dw_core OpenGL::GL OpenGL::GLU GLUT::GLUT)
+    target_link_libraries(gl4dw PRIVATE gl4dw_core OpenGL::GL OpenGL::GLU GLUT::GLUT nlohmann_json::nlohmann_json)
     if(MSVC)
       target_compile_definitions(gl4dw PRIVATE _CRT_SECURE_NO_WARNINGS)
       target_compile_options(gl4dw PRIVATE /permissive- /W3)

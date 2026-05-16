@@ -1,6 +1,7 @@
 {
   "dependencies": [
-    "freeglut"
+    "freeglut",
+    "nlohmann-json"
   ],
   "vcpkg-configuration": {
     "default-registry": {

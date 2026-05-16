@@ -1,0 +1,9 @@
+{
+  "dataDir": "data",
+  "width": 640,
+  "extendRate": 0.06,
+  "clip": false,
+  "clipPlane": [1.0, -1.0, -1.0, 0.0],
+  "hidePoly": 0,
+  "fillType": 0
+}

@@ -79,7 +79,11 @@ int main(int argc, char** argv)
 	// コマンドラインの読み込み
 	read_comandline(argc, argv);
 	log_step("main: read_commandline done");
-	ReadPolytope(name);
+	if(!ReadPolytope(name))
+	{
+		log_step("main: ReadPolytope failed");
+		return 1;
+	}
 	log_step("main: ReadPolytope done");
 	//OpenGLの初期化
 	glutInit(&argc, argv);

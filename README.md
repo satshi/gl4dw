@@ -28,7 +28,7 @@ This builds:
 - `build\gl4dw_data_smoke.exe`
 - `build\gl4dw.exe`
 
-The viewer depends on `freeglut`, which is declared in `vcpkg.json`.
+The viewer depends on `freeglut` and `nlohmann-json`, which are declared in `vcpkg.json`.
 
 ## Running
 
@@ -49,6 +49,9 @@ build\gl4dw.exe
 ```
 
 The program also writes startup progress to `gl4dw.log`.
+
+Optional viewer settings can be stored in `gl4d.json` in the project root.
+See `config\gl4d.json.example` for the supported keys.
 
 To open another dataset, pass the name without the `.poi` extension:
 
