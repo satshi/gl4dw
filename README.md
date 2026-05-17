@@ -1,69 +1,137 @@
 # gl4dw
 
-`gl4dw` is a legacy Visual C++ 6/OpenGL viewer for 4D polytopes.
+`gl4dw` is a legacy OpenGL viewer for 4D polytopes, now buildable with CMake on Windows and Linux/WSL.
 
 ## Layout
 
 - `src/` - C++ implementation files
-- `include/` - project headers and small VC6 compatibility headers
-- `tests/` - smoke-test programs
+- `include/` - project headers and compatibility wrappers
+- `tests/` - smoke and data validation tests
 - `data/` - polytope datasets
 - `config/` - optional configuration examples
 - `docs/` - notes preserved from the legacy project
 
-## Modern Windows build
+## Dependencies
+
+Required for all builds:
+
+- CMake 3.20 or newer
+- C++17 compiler
+- nlohmann-json
+
+Required for the viewer:
+
+- OpenGL
+- GLUT/freeglut
+
+On Windows, dependencies are declared in `vcpkg.json`.
+
+On Ubuntu/WSL:
+
+```bash
+sudo apt update
+sudo apt install cmake ninja-build g++ nlohmann-json3-dev freeglut3-dev
+```
+
+## Windows Build
 
 Open a Visual Studio developer shell, then run:
 
 ```bat
-call "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\Tools\VsDevCmd.bat" -arch=x64
-cmake -S . -B build -G "NMake Makefiles" -DCMAKE_TOOLCHAIN_FILE="C:/Program Files/Microsoft Visual Studio/18/Community/VC/vcpkg/scripts/buildsystems/vcpkg.cmake" -DGL4DW_BUILD_VIEWER=ON
+call "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\Tools\VsDevCmd.bat" -arch=x86
+cmake -S . -B build
 cmake --build build
+ctest --test-dir build --output-on-failure
 ```
 
-This builds:
+## Linux/WSL Build
 
-- `build\gl4dw_core.lib`
-- `build\gl4dw_smoke.exe`
-- `build\gl4dw_data_smoke.exe`
-- `build\gl4dw.exe`
+Core and tests only:
 
-The viewer depends on `freeglut` and `nlohmann-json`, which are declared in `vcpkg.json`.
+```bash
+cmake -S . -B build-wsl-ninja -G Ninja -DGL4DW_BUILD_VIEWER=OFF
+cmake --build build-wsl-ninja
+ctest --test-dir build-wsl-ninja --output-on-failure
+```
+
+Viewer build:
+
+```bash
+cmake -S . -B build-wsl-viewer -G Ninja -DGL4DW_BUILD_VIEWER=ON
+cmake --build build-wsl-viewer
+ctest --test-dir build-wsl-viewer --output-on-failure
+```
+
+## Build Targets
+
+The core library is `gl4dw_core`.
+
+Test executables:
+
+- `gl4dw_smoke`
+- `gl4dw_config_smoke`
+- `gl4dw_data_smoke`
+- `gl4dw_data_validation`
+- `gl4dw_readpolytope_failure`
+
+Viewer executable:
+
+- `gl4dw`
+
+`ReadPolytope` lives in `src/polytope_loader.cpp`, so data loading tests do not require OpenGL/GLUT.
 
 ## Running
 
 The default data directory is `data`, and the default polytope name is `c8`.
 
-Run from the project root so the relative data path resolves correctly:
+Windows:
 
 ```bat
-build\gl4dw.exe
+build\gl4dw.exe c8
 ```
 
-If double-clicking appears to do nothing, run it from PowerShell or Command
-Prompt instead so startup errors stay visible:
+WSL/Linux:
 
-```bat
-cd /d F:\usr\ai\work\gl4dw
-build\gl4dw.exe
+```bash
+./build-wsl-viewer/gl4dw c8
 ```
 
-The program also writes startup progress to `gl4dw.log`.
+If WSLg does not show GUI windows, restart WSL from Windows:
+
+```powershell
+wsl --shutdown
+```
+
+Then reopen WSL and run the viewer again. If OpenGL acceleration is unreliable, try:
+
+```bash
+LIBGL_ALWAYS_SOFTWARE=1 ./build-wsl-viewer/gl4dw c8
+```
+
+The program writes startup progress to `gl4dw.log`.
+
+## Configuration
 
 Optional viewer settings can be stored in `gl4d.json` in the project root.
-See `config\gl4d.json.example` for the supported keys.
+See `config/gl4d.json.example` for the supported keys.
 
-To open another dataset, pass the name without the `.poi` extension:
+Example:
 
-```bat
-build\gl4dw.exe C24
+```json
+{
+  "dataDir": "data",
+  "width": 800,
+  "extendRate": 0.06,
+  "clip": false,
+  "clipPlane": [1.0, -1.0, -1.0, 0.0],
+  "hidePoly": 0,
+  "fillType": 0
+}
 ```
 
-## Core-only build
+## Controls
 
-If GLUT/freeglut is not available, build only the geometry core and smoke test:
-
-```bat
-cmake -S . -B build -G "NMake Makefiles" -DGL4DW_BUILD_VIEWER=OFF
-cmake --build build
-```
+- Drag with the left mouse button to rotate in one set of 4D planes.
+- Drag with another mouse button to rotate in the alternate planes.
+- After releasing the mouse, the polytope keeps spinning.
+- Press `q`, `Q`, or `Esc` to exit.
