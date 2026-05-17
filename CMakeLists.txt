@@ -26,6 +26,7 @@ add_library(gl4dw_core STATIC
   src/pgen.cpp
   src/points.cpp
   src/polytope.cpp
+  src/polytope_loader.cpp
   src/proj.cpp
   src/Vector.cpp
   src/vector3.cpp
@@ -54,54 +55,51 @@ if(GL4DW_BUILD_SMOKE_TEST)
   if(BUILD_TESTING)
     add_test(NAME gl4dw_config_smoke COMMAND gl4dw_config_smoke)
   endif()
+
+  add_executable(gl4dw_data_smoke tests/data_smoke.cpp)
+  target_link_libraries(gl4dw_data_smoke PRIVATE gl4dw_core)
+  if(BUILD_TESTING)
+    add_test(NAME gl4dw_data_smoke COMMAND gl4dw_data_smoke)
+    set_tests_properties(gl4dw_data_smoke PROPERTIES
+      WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+    )
+  endif()
+
+  add_executable(gl4dw_data_validation tests/data_validation.cpp)
+  target_link_libraries(gl4dw_data_validation PRIVATE gl4dw_core)
+  if(BUILD_TESTING)
+    add_test(NAME gl4dw_data_validation COMMAND gl4dw_data_validation)
+    set_tests_properties(gl4dw_data_validation PROPERTIES
+      WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+    )
+  endif()
+
+  add_executable(gl4dw_readpolytope_failure tests/readpolytope_failure.cpp)
+  target_link_libraries(gl4dw_readpolytope_failure PRIVATE gl4dw_core)
+  if(BUILD_TESTING)
+    add_test(NAME gl4dw_readpolytope_failure COMMAND gl4dw_readpolytope_failure)
+  endif()
 endif()
 
 if(GL4DW_BUILD_VIEWER)
   find_package(OpenGL REQUIRED)
   find_package(GLUT QUIET)
-
-  if(GLUT_FOUND)
-    if(GL4DW_BUILD_SMOKE_TEST)
-      add_executable(gl4dw_data_smoke
-        tests/data_smoke.cpp
-        src/gl4d.cpp
-      )
-      target_link_libraries(gl4dw_data_smoke PRIVATE gl4dw_core OpenGL::GL OpenGL::GLU GLUT::GLUT)
-      if(BUILD_TESTING)
-        add_test(NAME gl4dw_data_smoke COMMAND gl4dw_data_smoke)
-        set_tests_properties(gl4dw_data_smoke PROPERTIES
-          WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+  if(NOT GLUT_FOUND)
+    find_path(GLUT_INCLUDE_DIR NAMES GL/glut.h GLUT/glut.h)
+    find_library(GLUT_LIBRARY NAMES glut freeglut GLUT)
+    if(GLUT_INCLUDE_DIR AND GLUT_LIBRARY)
+      set(GLUT_FOUND TRUE)
+      if(NOT TARGET GLUT::GLUT)
+        add_library(GLUT::GLUT UNKNOWN IMPORTED)
+        set_target_properties(GLUT::GLUT PROPERTIES
+          IMPORTED_LOCATION "${GLUT_LIBRARY}"
+          INTERFACE_INCLUDE_DIRECTORIES "${GLUT_INCLUDE_DIR}"
         )
-      endif()
-      add_executable(gl4dw_data_validation
-        tests/data_validation.cpp
-        src/gl4d.cpp
-      )
-      target_link_libraries(gl4dw_data_validation PRIVATE gl4dw_core OpenGL::GL OpenGL::GLU GLUT::GLUT)
-      if(BUILD_TESTING)
-        add_test(NAME gl4dw_data_validation COMMAND gl4dw_data_validation)
-        set_tests_properties(gl4dw_data_validation PROPERTIES
-          WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-        )
-      endif()
-      add_executable(gl4dw_readpolytope_failure
-        tests/readpolytope_failure.cpp
-        src/gl4d.cpp
-      )
-      target_link_libraries(gl4dw_readpolytope_failure PRIVATE gl4dw_core OpenGL::GL OpenGL::GLU GLUT::GLUT)
-      if(BUILD_TESTING)
-        add_test(NAME gl4dw_readpolytope_failure COMMAND gl4dw_readpolytope_failure)
-      endif()
-      if(MSVC)
-        target_compile_definitions(gl4dw_data_smoke PRIVATE _CRT_SECURE_NO_WARNINGS)
-        target_compile_options(gl4dw_data_smoke PRIVATE /permissive- /W3)
-        target_compile_definitions(gl4dw_data_validation PRIVATE _CRT_SECURE_NO_WARNINGS)
-        target_compile_options(gl4dw_data_validation PRIVATE /permissive- /W3)
-        target_compile_definitions(gl4dw_readpolytope_failure PRIVATE _CRT_SECURE_NO_WARNINGS)
-        target_compile_options(gl4dw_readpolytope_failure PRIVATE /permissive- /W3)
       endif()
     endif()
+  endif()
 
+  if(GLUT_FOUND)
     add_executable(gl4dw
       src/gl4d.cpp
       src/glevent.cpp

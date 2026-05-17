@@ -1,76 +1,14 @@
 #include "gl4d.h"
-#include <gl/glut.h>
-#include <fstream.h>
+#include "gl_compat.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <string>
-
-polytope poly;
 
 Ary<Vector3> vertices3;
 projector proj;
 Vector3 viewp(0.0, 0.0, 3.5);
-std::string data_dir = "data";
 int hidePoly=0;
 double ExtendRate=0.06;
-
-static int open_data_file(ifstream& is, std::string& fname, const std::string& file_name)
-{
-        if(is.is_open()) is.close();
-        is.clear();
-        fname = data_dir + "\\" + file_name;
-        is.open(fname.c_str(), ios::in);
-	if(!is && data_dir == "data")
-	{
-		is.clear();
-		fname = std::string("..\\data\\") + file_name;
-		is.open(fname.c_str(), ios::in);
-	}
-	return !!is;
-}
-
-int ReadPolytope(char* pname)
-{
-	std::string fname;
-	std::string ccfname;
-	
-	ifstream is;
-	if(!open_data_file(is, fname, std::string(pname) + ".poi"))
-	{
-		cerr<<"Cannot open file"<<fname<<endl;
-		return 0;
-	}
-	poly.read_vertices(is);
-	is>>ccfname;
-	if(!open_data_file(is, fname, std::string("f") + pname + ".cel"))
-	{
-		cerr<<"Cannot open file"<<fname<<endl;
-		return 0;
-	}
-	poly.read_faces(is);
-	if(!open_data_file(is, fname, ccfname))
-	{
-		cerr<<"Cannot open file"<<fname<<endl;
-		return 0;
-	}
-	poly.read_Facet_nomals(is);
-	double l=1.0/(*poly.vertices)[0].norm();
-	for(int i=0;i<poly.vertices->n;i++)
-	{
-		(*poly.vertices)[i]*=l;
-	}
-	vertices3.renew(poly.vertices->n);
-	poly.make__Facets();
-	poly.make__Facets_to_faces();
-	for(int i=0;i<poly.Facets->n;i++)
-	{
-		Vector4& cv=(*poly.Facet_nomals)[i];
-		cv*=1.0/cv.norm();
-	}
-	
-	return 1;
-}
 
 GLfloat mat_diffuse[11][3]={{1.0, 0.6, 1.0}, {0.87, 0.87, 0.3}, {0.3, 1.0, 1.0}
 			,{1.0, 0.6, 0.4}, {0.5, 1.0, 0.5}, {0.7, 0.7, 1.0}
@@ -84,6 +22,7 @@ void drawPolytopeSolid(void)
 	points& vertices=*poly.vertices;
 	cells& faces=*poly.faces;
 	cells& ff=*poly.Facets_to_faces;
+	if(vertices3.n != vertices.n) vertices3.renew(vertices.n);
 	
 	for(i=0;i<vertices.n;i++)
 		vertices3[i]=proj.projection(vertices[i]);
@@ -131,6 +70,7 @@ void drawPolytopeFrame(void)
 	points& vertices=*poly.vertices;
 	cells& faces=*poly.faces;
 	cells& ff=*poly.Facets_to_faces;
+	if(vertices3.n != vertices.n) vertices3.renew(vertices.n);
 	
 	for(i=0;i<vertices.n;i++)
 		vertices3[i]=proj.projection(vertices[i]);

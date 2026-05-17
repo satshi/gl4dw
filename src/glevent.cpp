@@ -1,14 +1,22 @@
-#include <gl/glut.h>
+#include "gl_compat.h"
 #include <time.h>
+#include <stdio.h>
 #include "gl4d.h"
 
 #define FILL_TYPE_SOLID 0
 #define FILL_TYPE_FRAME 1
 
 int FillType=FILL_TYPE_SOLID;
+extern void log_step(const char* message);
 
 void ev_display(void)
 {
+	static int display_count=0;
+	if(display_count < 5)
+	{
+		log_step("event: display");
+		display_count++;
+	}
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	if(FillType==FILL_TYPE_FRAME)
 		drawPolytopeFrame();
@@ -22,6 +30,49 @@ static int pushed_button=GLUT_RIGHT_BUTTON;
 static int xx, yy;
 static double theta[6]={0, 0, 0, 0, 0, 0};
 static double phi[6]={0, 0, 0, 0, 0, 0};
+static int spin_timer_active=0;
+static projector projt;
+
+static int has_spin()
+{
+	for(int i=0;i<6;i++)
+	{
+		if(theta[i]!=0.0 || phi[i]!=0.0) return 1;
+	}
+	return 0;
+}
+
+static void step_spin()
+{
+	projt.rotation(theta);
+	projt.rotation(phi);
+	for(int i=0;i<4;i++)
+		for(int j=0;j<4;j++)
+			proj[i][j]=projt[j][i];
+	glutPostRedisplay();
+}
+
+static void ev_spin_timer(int)
+{
+	if(mouse_state==GLUT_UP && has_spin())
+	{
+		step_spin();
+		glutTimerFunc(16, ev_spin_timer, 0);
+	}
+	else
+	{
+		spin_timer_active=0;
+	}
+}
+
+static void start_spin_timer()
+{
+	if(!spin_timer_active && mouse_state==GLUT_UP && has_spin())
+	{
+		spin_timer_active=1;
+		glutTimerFunc(16, ev_spin_timer, 0);
+	}
+}
 
 void ev_mouse(int button, int state, int x, int y)
 {
@@ -38,9 +89,12 @@ void ev_mouse(int button, int state, int x, int y)
 		xx=x;
 		yy=y;
 	}
+	else
+	{
+		start_spin_timer();
+	}
 }
 
-static projector projt;
 void ev_move(int x, int y)
 {
 	if(mouse_state==GLUT_DOWN)
@@ -64,7 +118,7 @@ void ev_move(int x, int y)
 		for(int i=0;i<4;i++)
 			for(int j=0;j<4;j++)
 				proj[i][j]=projt[j][i];
-		ev_display();
+		glutPostRedisplay();
 		xx=x;
 		yy=y;
 	}
@@ -86,6 +140,9 @@ void ev_key(unsigned char key, int x, int y)
 
 void ev_resize(int w, int h)
 {
+	char logbuf[128];
+	snprintf(logbuf, sizeof(logbuf), "event: resize %d %d", w, h);
+	log_step(logbuf);
 	if(h <= 0) h = 1;
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
@@ -104,18 +161,5 @@ void ev_resize(int w, int h)
 
 void ev_idle()
 {
-	int mv=0;
-	for(int i=0;i<6;i++)
-	{
-		mv=mv || (theta[i]!=0.0) || (phi[i]!=0.0);
-	}
-	if(mv && (mouse_state==GLUT_UP))
-	{
-		projt.rotation(theta);
-		projt.rotation(phi);
-		for(int i=0;i<4;i++)
-			for(int j=0;j<4;j++)
-				proj[i][j]=projt[j][i];
-		ev_display();
-	}
+	start_spin_timer();
 }

@@ -1,10 +1,10 @@
-#include "polytope.h"
+#include "polytope_loader.h"
 #include "vector3.h"
 
 extern projector proj;
 extern Vector3 viewp;
+extern Ary<Vector3> vertices3;
 
-int ReadPolytope(char* pname);
 void drawPolytopeFrame();
 void drawPolytopeSolid();
 

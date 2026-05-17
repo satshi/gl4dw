@@ -6,6 +6,7 @@
 #include <fstream.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <algorithm>
 #include <string>
 #define NONSENCE_INDEX (-1)
 #define message(A)
@@ -437,7 +438,7 @@ void polytope::load_base(char* fname)
 		//ベクトルの長さを調整する。
 		double l=0;
 		for(i=0;i<vertices->n;i++)
-			l=__max(l,(*vertices)[i].norm());
+			l=std::max(l,(*vertices)[i].norm());
 		l=(*vertices)[0].norm();
 		for(i=0;i<vertices->n;i++)
 			(*vertices)[i]*=(1.0/l);

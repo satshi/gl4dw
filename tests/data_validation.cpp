@@ -1,8 +1,6 @@
-#include "gl4d.h"
+#include "polytope_loader.h"
 
 #include <cmath>
-
-extern polytope poly;
 
 namespace {
 

@@ -1,7 +1,6 @@
 
 #include <stdio.h>
-#include <GL/glut.h>
-#include <windows.h>
+#include "gl_compat.h"
 #include <string>
 #include "gl4d.h"
 #include "glevent.h"
@@ -22,7 +21,7 @@ int Width=640;
 int Height=480;
 char *window_name=(char*)"gl4dw";
 char *name=(char*)"c8";
-static void log_step(const char* message)
+void log_step(const char* message)
 {
 	FILE* fp = fopen("gl4dw.log", "a");
 	if(fp)
@@ -89,7 +88,7 @@ int main(int argc, char** argv)
 	//OpenGLの初期化
 	glutInit(&argc, argv);
 	log_step("main: glutInit done");
-	glutInitWindowPosition(100, 100);
+	glutInitWindowPosition(300, 300);
 	glutInitWindowSize(Width, Height);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	//glutGameModeString("640x480:16@60");
@@ -97,6 +96,8 @@ int main(int argc, char** argv)
 	int window_id = glutCreateWindow(window_name);
 	std::string logbuf = std::string("main: glutCreateWindow id=") + std::to_string(window_id);
 	log_step(logbuf.c_str());
+	glutPositionWindow(300, 300);
+	glutReshapeWindow(Width, Height);
 	glutShowWindow();
 	glutPostRedisplay();
 	// イベント処理関数
@@ -104,11 +105,11 @@ int main(int argc, char** argv)
 	glutReshapeFunc(ev_resize);
 	glutMouseFunc(ev_mouse);
 	glutMotionFunc(ev_move);
-	glutIdleFunc(ev_idle);
 	glutKeyboardFunc(ev_key);
 	//シーンの初期化
 	init();
 	log_step("main: init done");
+	glutPostRedisplay();
 	// メインループ
 	log_step("main: entering glutMainLoop");
 	glutMainLoop();

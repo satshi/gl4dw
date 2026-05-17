@@ -1,4 +1,4 @@
-extern int ReadPolytope(char* pname);
+#include "polytope_loader.h"
 
 int main()
 {
