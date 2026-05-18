@@ -1,2 +1,2 @@
 void read_param();
-void read_comandline(int argc, char** argv);
+void read_commandline(int argc, char** argv);

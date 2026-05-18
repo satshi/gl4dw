@@ -10,15 +10,15 @@ Vector3 viewp(0.0, 0.0, 3.5);
 int hidePoly=0;
 double ExtendRate=0.06;
 
-GLfloat mat_diffuse[11][3]={{1.0, 0.6, 1.0}, {0.87, 0.87, 0.3}, {0.3, 1.0, 1.0}
-			,{1.0, 0.6, 0.4}, {0.5, 1.0, 0.5}, {0.7, 0.7, 1.0}
-			,{1.0, 0.8, 0.4}, {0.4, 0.8, 1.0}, {0.85, 0.6, 1.0}
-			,{1.0, 0.4, 0.8}, {0.4, 1.0, 0.8}};
+GLfloat mat_diffuse[11][3]={{1.0f, 0.6f, 1.0f}, {0.87f, 0.87f, 0.3f}, {0.3f, 1.0f, 1.0f}
+			,{1.0f, 0.6f, 0.4f}, {0.5f, 1.0f, 0.5f}, {0.7f, 0.7f, 1.0f}
+			,{1.0f, 0.8f, 0.4f}, {0.4f, 0.8f, 1.0f}, {0.85f, 0.6f, 1.0f}
+			,{1.0f, 0.4f, 0.8f}, {0.4f, 1.0f, 0.8f}};
 
 
 void drawPolytopeSolid(void)
 {
-	register int i,j,k, prevn=0;
+	int i,j,k, prevn=0;
 	points& vertices=*poly.vertices;
 	cells& faces=*poly.faces;
 	cells& ff=*poly.Facets_to_faces;
@@ -28,7 +28,7 @@ void drawPolytopeSolid(void)
 		vertices3[i]=proj.projection(vertices[i]);
 	
 	for(k=0;k<ff.n;k++)
-	if( dot(proj[3],(*poly.Facet_nomals)[k])>0
+	if( dot(proj[3],(*poly.Facet_normals)[k])>0
 		&& ff[k].n !=hidePoly)
 	{
 		if(ff[k].n!=prevn)
@@ -36,27 +36,27 @@ void drawPolytopeSolid(void)
 			prevn=ff[k].n;
 			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_diffuse[prevn%11]);
 		}
-		Vector3 ext=proj.projection((*poly.Facet_nomals)[k])*ExtendRate;
+		Vector3 ext=proj.projection((*poly.Facet_normals)[k])*ExtendRate;
 		for (i = 0; i < ff[k].n; i++)
 		{
 			cell& cface=faces[ff[k][i]];
 			Vector3& v0=vertices3[cface[0]];
 			Vector3 v1=vertices3[cface[1]]-vertices3[cface[0]];
 			Vector3 v2=vertices3[cface[2]]-vertices3[cface[0]];
-			Vector3 nomal=cross(v1,v2);
-			if(dot(nomal, (viewp-v0))>0)
+			Vector3 normal=cross(v1,v2);
+			if(dot(normal, (viewp-v0))>0)
 			{
-				nomal*=1.0/norm(nomal);
+				normal*=1.0/norm(normal);
 			}
 			else
 			{
-				nomal*=-1.0/norm(nomal);
+				normal*=-1.0/norm(normal);
 			}
-			glNormal3dv(nomal.x);
+			glNormal3dv(normal.x);
 			glBegin(GL_TRIANGLE_FAN);
 				for(j=0;j<cface.n;j++)
 				{
-					register Vector3 v=vertices3[cface[j]]+ext;
+					Vector3 v=vertices3[cface[j]]+ext;
 					glVertex3dv(v.x);
 				}
 			glEnd();
@@ -66,7 +66,7 @@ void drawPolytopeSolid(void)
 
 void drawPolytopeFrame(void)
 {
-	register int i,j,k, prevn=0;
+	int i,j,k, prevn=0;
 	points& vertices=*poly.vertices;
 	cells& faces=*poly.faces;
 	cells& ff=*poly.Facets_to_faces;
@@ -76,7 +76,7 @@ void drawPolytopeFrame(void)
 		vertices3[i]=proj.projection(vertices[i]);
 	
 	for(k=0;k<ff.n;k++)
-	if( dot((*poly.Facet_nomals)[k], proj[3])>0
+	if( dot((*poly.Facet_normals)[k], proj[3])>0
 		&& ff[k].n !=hidePoly)
 	{
 		if(ff[k].n!=prevn)
@@ -84,14 +84,14 @@ void drawPolytopeFrame(void)
 			prevn=ff[k].n;
 			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_diffuse[prevn%11]);
 		}
-		Vector3 ext=proj.projection((*poly.Facet_nomals)[k])*ExtendRate;
+		Vector3 ext=proj.projection((*poly.Facet_normals)[k])*ExtendRate;
 		for (i = 0; i < ff[k].n; i++)
 		{
 			cell& cface=faces[ff[k][i]];
 			Vector3& v0=vertices3[cface[0]];
 			Vector3 v1=vertices3[cface[1]]-vertices3[cface[0]];
 			Vector3 v2=vertices3[cface[2]]-vertices3[cface[0]];
-			Vector3 nomal=cross(v1,v2);
+			Vector3 normal=cross(v1,v2);
 			Vector3 center(0,0,0);
 			for(j=0;j<cface.n;j++)
 			{
@@ -99,25 +99,25 @@ void drawPolytopeFrame(void)
 			}
 			center*=1.0/cface.n;
 			center+=ext;
-			if(dot(nomal, (viewp-v0))>0)
+			if(dot(normal, (viewp-v0))>0)
 			{
-				nomal*=1.0/norm(nomal);
+				normal*=1.0/norm(normal);
 			}
 			else
 			{
-				nomal*=-1.0/norm(nomal);
+				normal*=-1.0/norm(normal);
 			}
-			glNormal3dv(nomal.x);
+			glNormal3dv(normal.x);
 			glBegin(GL_TRIANGLE_STRIP);
 				for(j=0;j<cface.n;j++)
 				{
 					Vector3 v=vertices3[cface[j]]+ext;
-					register Vector3 vv=0.35*center+0.65*v;
+					Vector3 vv=0.35*center+0.65*v;
 					glVertex3dv(v.x);
 					glVertex3dv(vv.x);
 				}
 				Vector3 v=vertices3[cface[0]]+ext;
-				register Vector3  vv=0.35*center+0.65*v;
+				Vector3  vv=0.35*center+0.65*v;
 				glVertex3dv(v.x);
 				glVertex3dv(vv.x);
 			glEnd();

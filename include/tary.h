@@ -1,8 +1,12 @@
 #ifndef _TARY_H_
 #define _TARY_H_
 
-#include<iostream.h>
+#include <iostream>
 #include <vector>
+
+using std::istream;
+using std::endl;
+using std::ostream;
 
 typedef int INDEX;
 

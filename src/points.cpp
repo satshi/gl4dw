@@ -10,7 +10,7 @@ cells* points::edges_of_unit_length()
 	{
 /*		if((i%100)==0)
 		{
-			if(e.interupt(i*100/n))return NULL;
+			if(e.interrupt(i*100/n))return NULL;
 		}
 */
 		for(j=i+1;j<n;j++)

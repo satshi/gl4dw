@@ -6,9 +6,12 @@
 #define M_PI		3.14159265358979323846
 #endif
 
-#include<iostream.h>
+#include <iostream>
 #include "vector3.h"
 #include "tary.h"
+
+using std::istream;
+using std::ostream;
 
 //	**********	４次元ベクトルのクラス		*******************
 

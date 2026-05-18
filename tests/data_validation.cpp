@@ -23,7 +23,7 @@ int main()
 
     if(int rc = require(poly.vertices && poly.vertices->n == 16, 2)) return rc;
     if(int rc = require(poly.faces && poly.faces->n == 24, 3)) return rc;
-    if(int rc = require(poly.Facet_nomals && poly.Facet_nomals->n == 8, 4)) return rc;
+    if(int rc = require(poly.Facet_normals && poly.Facet_normals->n == 8, 4)) return rc;
     if(int rc = require(poly.Facets && poly.Facets->n == 8, 5)) return rc;
     if(int rc = require(poly.Facets_to_faces && poly.Facets_to_faces->n == 8, 6)) return rc;
 
@@ -55,8 +55,8 @@ int main()
         }
     }
 
-    for(int i = 0; i < poly.Facet_nomals->n; ++i) {
-        if(!near((*poly.Facet_nomals)[i].norm(), 1.0)) return 16;
+    for(int i = 0; i < poly.Facet_normals->n; ++i) {
+        if(!near((*poly.Facet_normals)[i].norm(), 1.0)) return 16;
     }
 
     return 0;

@@ -1,70 +1,124 @@
 # gl4dw
 
-`gl4dw` is a legacy OpenGL viewer for 4D polytopes, now buildable with CMake on Windows and Linux/WSL.
+`gl4dw` is a legacy OpenGL viewer for 4D polytopes. The original code and
+polytope data have been refreshed enough to build with CMake on Windows and
+Linux/WSL while preserving the small, direct structure of the old program.
 
-## Layout
+The viewer loads polytope data from `data/`, projects it into 3D, and displays
+it with GLUT/OpenGL. The repository also includes smoke tests and data
+validation tests that can run without opening a viewer window.
+
+## Repository Layout
 
 - `src/` - C++ implementation files
 - `include/` - project headers and compatibility wrappers
-- `tests/` - smoke and data validation tests
-- `data/` - polytope datasets
-- `config/` - optional configuration examples
+- `tests/` - smoke tests and data validation tests
+- `data/` - bundled polytope datasets
+- `config/` - example viewer configuration
 - `docs/` - notes preserved from the legacy project
 
-## Dependencies
+## Requirements
 
 Required for all builds:
 
 - CMake 3.20 or newer
-- C++17 compiler
+- A C++17 compiler
 - nlohmann-json
 
 Required for the viewer:
 
 - OpenGL
-- GLUT/freeglut
+- GLUT or freeglut
 
-On Windows, dependencies are declared in `vcpkg.json`.
-
-On Ubuntu/WSL:
+On Windows, dependencies are declared in `vcpkg.json`. On Ubuntu/WSL, install
+the system packages:
 
 ```bash
 sudo apt update
 sudo apt install cmake ninja-build g++ nlohmann-json3-dev freeglut3-dev
 ```
 
-## Windows Build
+## Building on Windows
 
-Open a Visual Studio developer shell, then run:
+Open a Visual Studio Developer Command Prompt, then configure, build, and test:
 
 ```bat
-call "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\Tools\VsDevCmd.bat" -arch=x86
 cmake -S . -B build
 cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 
-## Linux/WSL Build
+If you use vcpkg manually, pass its toolchain file when configuring:
 
-Core and tests only:
-
-```bash
-cmake -S . -B build-wsl-ninja -G Ninja -DGL4DW_BUILD_VIEWER=OFF
-cmake --build build-wsl-ninja
-ctest --test-dir build-wsl-ninja --output-on-failure
+```bat
+cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake
 ```
 
-Viewer build:
+## Building on Linux/WSL
+
+Build the core library and tests without the OpenGL viewer:
 
 ```bash
-cmake -S . -B build-wsl-viewer -G Ninja -DGL4DW_BUILD_VIEWER=ON
-cmake --build build-wsl-viewer
-ctest --test-dir build-wsl-viewer --output-on-failure
+cmake -S . -B build-core -G Ninja -DGL4DW_BUILD_VIEWER=OFF
+cmake --build build-core
+ctest --test-dir build-core --output-on-failure
 ```
+
+Build the viewer as well:
+
+```bash
+cmake -S . -B build-viewer -G Ninja -DGL4DW_BUILD_VIEWER=ON
+cmake --build build-viewer
+ctest --test-dir build-viewer --output-on-failure
+```
+
+## Manual Install
+
+There is no CMake install target. To keep installation simple and user-local,
+copy the viewer executable and bundled data into a directory under your home
+directory.
+
+Windows example:
+
+```bat
+mkdir "%USERPROFILE%\gl4dw"
+copy build\gl4dw.exe "%USERPROFILE%\gl4dw\"
+xcopy data "%USERPROFILE%\gl4dw\data\" /E /I
+xcopy config "%USERPROFILE%\gl4dw\config\" /E /I
+```
+
+Linux/WSL example:
+
+```bash
+mkdir -p "$HOME/gl4dw"
+cp ./build-viewer/gl4dw "$HOME/gl4dw/"
+cp -R data "$HOME/gl4dw/"
+cp -R config "$HOME/gl4dw/"
+```
+
+Run the installed copy from that directory so the default `data` path resolves:
+
+```bash
+cd "$HOME/gl4dw"
+./gl4dw c8
+```
+
+On Windows, run:
+
+```bat
+cd /d "%USERPROFILE%\gl4dw"
+gl4dw.exe c8
+```
+
+If you want to run the executable from another working directory, copy
+`config\gl4d.json.example` to `gl4d.json` and set `dataDir` to the full path of
+the copied `data` directory.
 
 ## Build Targets
 
-The core library is `gl4dw_core`.
+The core library target is:
+
+- `gl4dw_core`
 
 Test executables:
 
@@ -78,11 +132,13 @@ Viewer executable:
 
 - `gl4dw`
 
-`ReadPolytope` lives in `src/polytope_loader.cpp`, so data loading tests do not require OpenGL/GLUT.
+`ReadPolytope` lives in `src/polytope_loader.cpp`, so the data loading tests do
+not require OpenGL or GLUT.
 
-## Running
+## Running the Viewer
 
 The default data directory is `data`, and the default polytope name is `c8`.
+You can also pass a polytope name on the command line.
 
 Windows:
 
@@ -90,10 +146,10 @@ Windows:
 build\gl4dw.exe c8
 ```
 
-WSL/Linux:
+Linux/WSL:
 
 ```bash
-./build-wsl-viewer/gl4dw c8
+./build-viewer/gl4dw c8
 ```
 
 If WSLg does not show GUI windows, restart WSL from Windows:
@@ -102,18 +158,19 @@ If WSLg does not show GUI windows, restart WSL from Windows:
 wsl --shutdown
 ```
 
-Then reopen WSL and run the viewer again. If OpenGL acceleration is unreliable, try:
+Then reopen WSL and run the viewer again. If OpenGL acceleration is unreliable,
+try software rendering:
 
 ```bash
-LIBGL_ALWAYS_SOFTWARE=1 ./build-wsl-viewer/gl4dw c8
+LIBGL_ALWAYS_SOFTWARE=1 ./build-viewer/gl4dw c8
 ```
 
 The program writes startup progress to `gl4dw.log`.
 
 ## Configuration
 
-Optional viewer settings can be stored in `gl4d.json` in the project root.
-See `config/gl4d.json.example` for the supported keys.
+Optional viewer settings can be stored in `gl4d.json` in the project root. See
+`config/gl4d.json.example` for the supported keys.
 
 Example:
 
@@ -135,3 +192,8 @@ Example:
 - Drag with another mouse button to rotate in the alternate planes.
 - After releasing the mouse, the polytope keeps spinning.
 - Press `q`, `Q`, or `Esc` to exit.
+
+## License
+
+This project, including the source code and bundled polytope data, is licensed
+under the BSD Zero Clause License (`0BSD`). See `LICENSE` for details.

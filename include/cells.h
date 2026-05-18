@@ -34,7 +34,7 @@ class cells:public acell
 	//中断するときはTRUEをかえす。
 	//ライブラリの中では定義されないで別途ソースを作る。
 	//inter.cpp
-	virtual BOOL interupt(int i);
+	virtual BOOL interrupt(int i);
 	virtual BOOL write(ostream& os) const;
 };
 

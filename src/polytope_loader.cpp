@@ -1,6 +1,11 @@
 #include "polytope_loader.h"
-#include <fstream.h>
+#include <fstream>
 #include <filesystem>
+
+using std::cerr;
+using std::endl;
+using std::ifstream;
+using std::ios;
 
 polytope poly;
 std::string data_dir = "data";
@@ -47,7 +52,7 @@ int ReadPolytope(char* pname)
 		cerr<<"Cannot open file"<<fname<<endl;
 		return 0;
 	}
-	poly.read_Facet_nomals(is);
+	poly.read_Facet_normals(is);
 	double l=1.0/(*poly.vertices)[0].norm();
 	for(int i=0;i<poly.vertices->n;i++)
 	{
@@ -57,7 +62,7 @@ int ReadPolytope(char* pname)
 	poly.make__Facets_to_faces();
 	for(int i=0;i<poly.Facets->n;i++)
 	{
-		Vector4& cv=(*poly.Facet_nomals)[i];
+		Vector4& cv=(*poly.Facet_normals)[i];
 		cv*=1.0/cv.norm();
 	}
 

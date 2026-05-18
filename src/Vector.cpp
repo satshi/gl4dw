@@ -17,7 +17,7 @@
 Vector4 rotation(double* th, const Vector4& v1)
 {
 	int i,j,m=0;
-	Vector4& v2=*new Vector4();
+	Vector4 v2;
 	Vector4 v3;
 
 	v3=v1;

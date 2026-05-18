@@ -21,7 +21,7 @@ char percent[10];
 
 */
 
-BOOL cells::interupt(int i)
+BOOL cells::interrupt(int i)
 {
 /*
 	app->PumpWaitingMessages();

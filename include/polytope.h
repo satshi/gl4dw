@@ -2,8 +2,6 @@
 
  *	多胞体クラスのヘッダ
 
- *	1996 3 S.yamaguchi
-
 多胞体の表示などで機種依存部をおそらく含まない部分。
 実際に使うときは多重継承などで機種依存部とあわせる。
  * ---------------------------------------------------------------------- */
@@ -26,7 +24,7 @@ class polytope
 	std::unique_ptr<cells> faces;
 	std::unique_ptr<cells> Facets;
 
-	std::unique_ptr<points> Facet_nomals;
+	std::unique_ptr<points> Facet_normals;
 	std::unique_ptr<cells> Facets_to_faces;
 	std::unique_ptr<cells> Facets_to_edges;
 	std::unique_ptr<cells> faces_to_edges;
@@ -42,7 +40,7 @@ class polytope
 
 	//===================		 入力関数
 	BOOL read_vertices(istream& is);
-	BOOL read_Facet_nomals(istream& is);
+	BOOL read_Facet_normals(istream& is);
 	BOOL read_faces(istream& is);
 	BOOL read_Facets(istream& is);
 	
@@ -82,10 +80,10 @@ inline BOOL polytope::read_vertices(istream& is)
 	return TRUE;
 }
 
-inline BOOL polytope::read_Facet_nomals(istream& is)
+inline BOOL polytope::read_Facet_normals(istream& is)
 {
-	Facet_nomals.reset(new points());
-	is>>(*Facet_nomals);
+	Facet_normals.reset(new points());
+	is>>(*Facet_normals);
 	return TRUE;
 }
 
@@ -107,8 +105,8 @@ inline BOOL polytope::read_Facets(istream& is)
 //========================	   要素を生成する関数
 inline BOOL polytope::make__Facets()
 {
-	if((!vertices) || (!Facet_nomals))return FALSE;
-	Facets.reset(new cells(*Facet_nomals, *vertices));
+	if((!vertices) || (!Facet_normals))return FALSE;
+	Facets.reset(new cells(*Facet_normals, *vertices));
 	flag_Facets.reset(new flag(Facets->n));
 	return TRUE;
 }

@@ -3,12 +3,17 @@
  * ---------------------------------------------------------------------- */
 #include "polytope.h"
 #include "dirutil.h"
-#include <fstream.h>
+#include <fstream>
 #include <stdlib.h>
 #include <stdio.h>
 #include <algorithm>
 #include <string>
-#define NONSENCE_INDEX (-1)
+
+using std::cerr;
+using std::endl;
+using std::ifstream;
+
+#define NONSENSE_INDEX (-1)
 #define message(A)
 
 polytope::~polytope()
@@ -44,7 +49,7 @@ polytope* polytope::slice(const aVector4& e, double b)
 			ix_e[i]=new_v.n;
 			new_v.n++;
 		}
-		else ix_e[i]=NONSENCE_INDEX;
+		else ix_e[i]=NONSENSE_INDEX;
 	}
 		polytope* ret=new polytope();
 		ret->vertices.reset(new points(new_v));
@@ -53,8 +58,8 @@ polytope* polytope::slice(const aVector4& e, double b)
 		(*(ret->Facets))[0].renew(new_v.n);
 		for(i=0;i<ret->Facets->n;i++)(*(ret->Facets))[0][i]=i;
 
-		ret->Facet_nomals.reset(new points(1));
-		(*(ret->Facet_nomals))[0]=e[3];
+		ret->Facet_normals.reset(new points(1));
+		(*(ret->Facet_normals))[0]=e[3];
 
 	if(faces)//面のデータがあれば稜のデータを作る。
 	{
@@ -68,7 +73,7 @@ polytope* polytope::slice(const aVector4& e, double b)
 			int vi=0;
 			for(int j=0;j<cc.n;j++)
 			{
-				if(ix_e[cc[j]]!=NONSENCE_INDEX)
+				if(ix_e[cc[j]]!=NONSENSE_INDEX)
 				{
 					if(vi==0)new_e[new_e.n].renew(2);
 
@@ -100,7 +105,7 @@ polytope* polytope::slice(const aVector4& e, double b)
 
 			for(int j=0;j<cc.n;j++)
 			{
-				if(ix_e[cc[j]]!=NONSENCE_INDEX)
+				if(ix_e[cc[j]]!=NONSENSE_INDEX)
 				{
 					buf[buf.n]=ix_e[cc[j]];
 					buf.n++;
@@ -147,7 +152,7 @@ polytope* polytope::cut(const aVector4& e, double b, BOOL include_slice)
 			ix_e[i]=new_v.n;
 			new_v.n++;
 		}
-		else ix_e[i]=NONSENCE_INDEX;
+		else ix_e[i]=NONSENSE_INDEX;
 	}
 	//int origin=new_v.n;
 	polytope* ret=new polytope();
@@ -161,7 +166,7 @@ polytope* polytope::cut(const aVector4& e, double b, BOOL include_slice)
 			ix_v[i]=new_v.n;
 			new_v.n++;
 		}
-		else ix_v[i]=NONSENCE_INDEX;
+		else ix_v[i]=NONSENSE_INDEX;
 	}
 	ret->vertices.reset(new points(new_v));
 
@@ -171,8 +176,8 @@ polytope* polytope::cut(const aVector4& e, double b, BOOL include_slice)
 	for(i=0;i<Facets->n;i++)(*Facets)[0][i]=i;
 */
 
-	ret->Facet_nomals.reset(new points(1));
-	(*(ret->Facet_nomals))[0]=e[3];
+	ret->Facet_normals.reset(new points(1));
+	(*(ret->Facet_normals))[0]=e[3];
 
 	if(faces)//面のデータがあれば稜のデータを作る。
 	{
@@ -187,7 +192,7 @@ polytope* polytope::cut(const aVector4& e, double b, BOOL include_slice)
 			int vi=0;
 			for(int j=0;j<cc.n;j++)
 			{
-				if(ix_e[cc[j]]!=NONSENCE_INDEX)
+				if(ix_e[cc[j]]!=NONSENSE_INDEX)
 				{
 					if(vi==0)new_e[new_e.n].renew(2);
 
@@ -244,7 +249,7 @@ polytope* polytope::cut(const aVector4& e, double b, BOOL include_slice)
 				
 				for(int j=0;j<cc.n;j++)
 				{
-					if(!(ix_e[cc[j]]==NONSENCE_INDEX))
+					if(!(ix_e[cc[j]]==NONSENSE_INDEX))
 					{
 						buf[buf.n]=ix_e[cc[j]];
 						buf.n++;
@@ -293,7 +298,7 @@ BOOL polytope::make_faces_from_Facets()
 		// メッセージ処理、パーセント表示
 		if((i%100)==0)
 		{
-			if(tfaces.interupt(i*100/Facets->n))return FALSE;
+			if(tfaces.interrupt(i*100/Facets->n))return FALSE;
 		}
 		// ここまで
 		cell& c1=(*Facets)[i];
@@ -362,7 +367,7 @@ BOOL polytope::make_edges_from_Facets_and_faces()
 		// メッセージ処理、パーセント表示
 		if((i%100)==0)
 		{
-			if(tedges.interupt(i*100/Facets->n))return FALSE;
+			if(tedges.interrupt(i*100/Facets->n))return FALSE;
 		}
 		// ここまで
 		cell& c1=(*Facets)[i];
@@ -458,7 +463,7 @@ void polytope::load_base(char* fname)
 		flag_edges.reset();
 		flag_faces.reset();
 //		delete fcenter; fcenter=NULL;
-		Facet_nomals.reset();
+		Facet_normals.reset();
 		Facets_to_edges.reset();
 		Facets_to_faces.reset();
 
@@ -485,10 +490,10 @@ void polytope::load_base(char* fname)
 		tmp_name=dir + "\\" + ccfile;
 		is.close();
 		is.open(tmp_name.c_str());
-		read_Facet_nomals(is);
-		if(Facet_nomals)
+		read_Facet_normals(is);
+		if(Facet_normals)
 		{
-			flag_Facets.reset(new flag(Facet_nomals->n));
+			flag_Facets.reset(new flag(Facet_normals->n));
 		}
 		//胞のデータを読み込む。
 		//ファイルネームは頂点のデータの頭にcをつけて

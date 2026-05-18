@@ -57,22 +57,22 @@ void mn_generater::generate(polytope& p)
 		c++;
 	}
 
-	p.Facet_nomals.reset(new points(m+n));
+	p.Facet_normals.reset(new points(m+n));
 	c=0;
 	for(i=0;i<m;i++)
 	{
-		(*p.Facet_nomals)[c][0]=cos(2.0*M_PI*(i+0.5)/m);
-		(*p.Facet_nomals)[c][1]=sin(2.0*M_PI*(i+0.5)/m);
-		(*p.Facet_nomals)[c][2]=0;
-		(*p.Facet_nomals)[c][3]=0;
+		(*p.Facet_normals)[c][0]=cos(2.0*M_PI*(i+0.5)/m);
+		(*p.Facet_normals)[c][1]=sin(2.0*M_PI*(i+0.5)/m);
+		(*p.Facet_normals)[c][2]=0;
+		(*p.Facet_normals)[c][3]=0;
 		c++;
 	}
 	for(i=0;i<n;i++)
 	{
-		(*p.Facet_nomals)[c][0]=0;
-		(*p.Facet_nomals)[c][1]=0;
-		(*p.Facet_nomals)[c][2]=cos(2.0*M_PI*(i+0.5)/n);
-		(*p.Facet_nomals)[c][3]=sin(2.0*M_PI*(i+0.5)/n);
+		(*p.Facet_normals)[c][0]=0;
+		(*p.Facet_normals)[c][1]=0;
+		(*p.Facet_normals)[c][2]=cos(2.0*M_PI*(i+0.5)/n);
+		(*p.Facet_normals)[c][3]=sin(2.0*M_PI*(i+0.5)/n);
 		c++;
 	}
 	p.faces.reset();
@@ -80,7 +80,7 @@ void mn_generater::generate(polytope& p)
 	p.faces.reset(new cells(fcenter,*p.vertices));
 	p.make__Facets();
 
-	p.flag_Facets.reset(new flag(p.Facet_nomals->n));
+	p.flag_Facets.reset(new flag(p.Facet_normals->n));
 	p.flag_faces.reset();
 //	p.flag_faces=new flag(p.fcenter->n);
 	p.Facets_to_edges.reset();
@@ -132,33 +132,33 @@ void anti_mn_generater::generate(polytope& p)
 		c++;
 	}
 
-	p.Facet_nomals.reset(new points(m+n+m*n/2));
+	p.Facet_normals.reset(new points(m+n+m*n/2));
 	c=0;
 	for(i=0;i<m;i++)for(j=0;j<n;j+=2)
 	{
-		(*p.Facet_nomals)[c][0]=lm*cos(2.0*M_PI*i/m);
-		(*p.Facet_nomals)[c][1]=lm*sin(2.0*M_PI*i/m);
-		(*p.Facet_nomals)[c][2]=ln*cos(2.0*M_PI*(j+i%2-1)/n);
-		(*p.Facet_nomals)[c][3]=ln*sin(2.0*M_PI*(j+i%2-1)/n);
+		(*p.Facet_normals)[c][0]=lm*cos(2.0*M_PI*i/m);
+		(*p.Facet_normals)[c][1]=lm*sin(2.0*M_PI*i/m);
+		(*p.Facet_normals)[c][2]=ln*cos(2.0*M_PI*(j+i%2-1)/n);
+		(*p.Facet_normals)[c][3]=ln*sin(2.0*M_PI*(j+i%2-1)/n);
 		c++;
 	}
 
-	for(i=0;i<c;i++)(*p.Facet_nomals)[i]*=ll;
+	for(i=0;i<c;i++)(*p.Facet_normals)[i]*=ll;
 
 	for(i=0;i<m;i++)
 	{
-		(*p.Facet_nomals)[c][0]=cos(2.0*M_PI*(i+0.5)/m);
-		(*p.Facet_nomals)[c][1]=sin(2.0*M_PI*(i+0.5)/m);
-		(*p.Facet_nomals)[c][2]=0;
-		(*p.Facet_nomals)[c][3]=0;
+		(*p.Facet_normals)[c][0]=cos(2.0*M_PI*(i+0.5)/m);
+		(*p.Facet_normals)[c][1]=sin(2.0*M_PI*(i+0.5)/m);
+		(*p.Facet_normals)[c][2]=0;
+		(*p.Facet_normals)[c][3]=0;
 		c++;
 	}
 	for(i=0;i<n;i++)
 	{
-		(*p.Facet_nomals)[c][0]=0;
-		(*p.Facet_nomals)[c][1]=0;
-		(*p.Facet_nomals)[c][2]=cos(2.0*M_PI*(i+0.5)/n);
-		(*p.Facet_nomals)[c][3]=sin(2.0*M_PI*(i+0.5)/n);
+		(*p.Facet_normals)[c][0]=0;
+		(*p.Facet_normals)[c][1]=0;
+		(*p.Facet_normals)[c][2]=cos(2.0*M_PI*(i+0.5)/n);
+		(*p.Facet_normals)[c][3]=sin(2.0*M_PI*(i+0.5)/n);
 		c++;
 	}
 	p.make__Facets();
@@ -184,7 +184,7 @@ void anti_mn_generater::generate(polytope& p)
 			c++;
 		}
 	}
-	p.flag_Facets.reset(new flag(p.Facet_nomals->n));
+	p.flag_Facets.reset(new flag(p.Facet_normals->n));
 	p.flag_faces.reset(new flag(p.faces->n));
 	p.Facets_to_faces.reset();
 	p.Facets_to_edges.reset();

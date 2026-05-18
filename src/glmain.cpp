@@ -5,16 +5,13 @@
 #include "gl4d.h"
 #include "glevent.h"
 #include "readp.h"
-const char copyright[]=
-   "gl4dw  Ver 0.1 \n"
-   "Copyright (c) 2001 Satoshi Yamaguchi\n";
 
-GLfloat light_ambient[] = {0.05, 0.05, 0.05, 0.05};	 /* ambient light. */
-GLfloat light_specular[] = {0.6, 0.6, 0.6, 1.0};  /* specular light. */
-GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};	 /*diffuse light. */
-GLfloat light_position[] = {-4.0, 4.0, 4.0, 0.0};  /* Inite light location. */
-GLfloat mat_specular[3]={0.6, 0.6, 0.6};  // specular material
-GLfloat fog_color[4]={0.6, 0.6, 0.6};	// fog color
+GLfloat light_ambient[] = {0.05f, 0.05f, 0.05f, 0.05f};	 /* ambient light. */
+GLfloat light_specular[] = {0.6f, 0.6f, 0.6f, 1.0f};  /* specular light. */
+GLfloat light_diffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};	 /*diffuse light. */
+GLfloat light_position[] = {-4.0f, 4.0f, 4.0f, 0.0f};  /* Inite light location. */
+GLfloat mat_specular[3]={0.6f, 0.6f, 0.6f};  // specular material
+GLfloat fog_color[4]={0.6f, 0.6f, 0.6f};	// fog color
 GLdouble clip_plane[4]={1,-1,-1,0};		// extra clip plane
 int Clip=0;	 // exstra clip or not
 int Width=640;
@@ -56,13 +53,13 @@ void init(void)
 
 	// Material
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
-	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS , 30.0);
+	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS , 30.0f);
 	// Background color
-	glClearColor(0.6, 0.6, 0.6, 0.6);
+	glClearColor(0.6f, 0.6f, 0.6f, 0.6f);
 	// Fog
 	glFogi(GL_FOG_MODE, GL_LINEAR);
-	glFogf(GL_FOG_START, 2.0);
-	glFogf(GL_FOG_END, 4.5);
+	glFogf(GL_FOG_START, 2.0f);
+	glFogf(GL_FOG_END, 4.5f);
 	glFogfv(GL_FOG_COLOR, fog_color);
 	glEnable(GL_FOG);
 
@@ -77,7 +74,7 @@ int main(int argc, char** argv)
 	read_param();  //パラメータの読み込み。
 	log_step("main: read_param done");
 	// コマンドラインの読み込み
-	read_comandline(argc, argv);
+	read_commandline(argc, argv);
 	log_step("main: read_commandline done");
 	if(!ReadPolytope(name))
 	{

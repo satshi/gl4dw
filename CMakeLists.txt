@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(gl4dw LANGUAGES CXX)
+project(gl4dw VERSION 0.1.0 LANGUAGES CXX)
 
 option(GL4DW_BUILD_VIEWER "Build the GLUT/OpenGL viewer" ON)
 option(GL4DW_BUILD_SMOKE_TEST "Build a tiny compile/link smoke test" ON)
@@ -32,7 +32,10 @@ add_library(gl4dw_core STATIC
   src/vector3.cpp
 )
 
-target_include_directories(gl4dw_core PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_include_directories(gl4dw_core
+  PUBLIC
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+)
 
 if(MSVC)
   target_compile_definitions(gl4dw_core PRIVATE _CRT_SECURE_NO_WARNINGS)

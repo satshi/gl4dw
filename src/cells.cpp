@@ -39,7 +39,7 @@ cells::cells(const acell& c1,const acell& c2,int vn/*=0*/)
 		// メッセージ処理、パーセント表示
 		if((i%100)==0)
 		{
-			if(interupt(i*100/n))return;
+			if(interrupt(i*100/n))return;
 		}
 		// ここまで
 
@@ -75,7 +75,7 @@ cells::cells(const aVector4& center /*セルの中心*/ , const aVector4& vx /*�
 //      メッセージ処理、パーセント表示
 		if((i%100)==0)
 		{
-			if(interupt(i*100/n))return;
+			if(interrupt(i*100/n))return;
 		}
 //      ここまで
 		ptr[i]=cell(center[i], vx);
@@ -98,7 +98,7 @@ void cells::inverse(const acell& ce)
 	for(i=0;i<n;i++)
 	{
 //      メッセージ処理、パーセント表示
-			if(interupt(i*100/n))return;
+			if(interrupt(i*100/n))return;
 //      ここまで
 		m=0;
 
@@ -133,7 +133,7 @@ cells* cells::inverse() const
 //      メッセージ処理、パーセント表示
 		if(i%100==0)
 		{
-			if(ret->interupt(i*100/(ret->n)))return NULL;
+			if(ret->interrupt(i*100/(ret->n)))return NULL;
 		}
 //      ここまで
 		m=0;
@@ -193,7 +193,7 @@ void cells::F_sort(const acell& eds)
 //      メッセージ処理、パーセント表示
 		if(i%100==0)
 		{
-			if(interupt(i*100/n))return;
+			if(interrupt(i*100/n))return;
 		}
 //      ここまで
 	}
