@@ -8,8 +8,11 @@ The viewer loads polytope data from `data/`, projects it into 3D, and displays
 it with GLUT/OpenGL. The repository also includes smoke tests and data
 validation tests that can run without opening a viewer window.
 
+![gl4dw displaying a 4D polytope](assets/screenshot.png)
+
 ## Repository Layout
 
+- `assets/` - screenshots and other repository media
 - `src/` - C++ implementation files
 - `include/` - project headers and compatibility wrappers
 - `tests/` - smoke tests and data validation tests
@@ -43,8 +46,8 @@ Open a Visual Studio Developer Command Prompt, then configure, build, and test:
 
 ```bat
 cmake -S . -B build
-cmake --build build
-ctest --test-dir build --output-on-failure
+cmake --build build --config Release
+ctest --test-dir build -C Release --output-on-failure
 ```
 
 If you use vcpkg manually, pass its toolchain file when configuring:
@@ -81,10 +84,17 @@ Windows example:
 
 ```bat
 mkdir "%USERPROFILE%\gl4dw"
-copy build\gl4dw.exe "%USERPROFILE%\gl4dw\"
+copy build\Release\gl4dw.exe "%USERPROFILE%\gl4dw\"
 xcopy data "%USERPROFILE%\gl4dw\data\" /E /I
 xcopy config "%USERPROFILE%\gl4dw\config\" /E /I
 ```
+
+For single-configuration generators, the executable may be `build\gl4dw.exe`
+instead. For Debug builds, it may be `build\Debug\gl4dw.exe`.
+
+If the viewer does not start because the freeglut DLL is missing, copy
+`freeglut.dll` or `freeglutd.dll` from the build directory or vcpkg installed
+tree into the same directory as `gl4dw.exe`.
 
 Linux/WSL example:
 
@@ -142,8 +152,10 @@ You can also pass a polytope name on the command line.
 Windows:
 
 ```bat
-build\gl4dw.exe c8
+build\Release\gl4dw.exe c8
 ```
+
+With a single-configuration generator, use `build\gl4dw.exe c8` instead.
 
 Linux/WSL:
 
@@ -193,6 +205,9 @@ Example:
 - Press `q`, `Q`, or `Esc` to exit.
 
 ## License
+
+The source code and bundled polytope data are original work by Satoshi
+Yamaguchi.
 
 This project, including the source code and bundled polytope data, is licensed
 under the BSD Zero Clause License (`0BSD`). See `LICENSE` for details.
