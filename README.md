@@ -15,7 +15,6 @@ validation tests that can run without opening a viewer window.
 - `tests/` - smoke tests and data validation tests
 - `data/` - bundled polytope datasets
 - `config/` - example viewer configuration
-- `docs/` - notes preserved from the legacy project
 
 ## Requirements
 
