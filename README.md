@@ -32,8 +32,18 @@ Required for the viewer:
 - OpenGL
 - GLUT or freeglut
 
-On Windows, dependencies are declared in `vcpkg.json`. On Ubuntu/WSL, install
-the system packages:
+On Windows, dependencies are declared in `vcpkg.json`. On macOS, install the
+user-space dependencies with Homebrew:
+
+```bash
+brew install cmake nlohmann-json
+```
+
+OpenGL and GLUT are provided by macOS, but Apple marks those APIs as deprecated.
+The viewer can still build, though macOS may print OpenGL/GLUT deprecation
+warnings during compilation.
+
+On Ubuntu/WSL, install the system packages:
 
 ```bash
 sudo apt update
@@ -73,6 +83,27 @@ cmake -S . -B build-viewer -G Ninja -DGL4DW_BUILD_VIEWER=ON
 cmake --build build-viewer
 ctest --test-dir build-viewer --output-on-failure
 ```
+
+## Building on macOS
+
+Build the core library and tests without opening a viewer window:
+
+```bash
+cmake -S . -B build-core-mac -DGL4DW_BUILD_VIEWER=OFF
+cmake --build build-core-mac
+ctest --test-dir build-core-mac --output-on-failure
+```
+
+Build the viewer as well:
+
+```bash
+cmake -S . -B build-viewer-mac -DGL4DW_BUILD_VIEWER=ON
+cmake --build build-viewer-mac
+ctest --test-dir build-viewer-mac --output-on-failure
+```
+
+If you prefer Ninja and have it installed, add `-G Ninja` to the configure
+commands. Without Ninja, CMake's default macOS generator works.
 
 ## Manual Install
 
