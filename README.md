@@ -209,6 +209,33 @@ LIBGL_ALWAYS_SOFTWARE=1 ./build-viewer/gl4dw c8
 
 The program writes startup progress to `gl4dw.log`.
 
+## Command Line Options
+
+Usage:
+
+```bash
+gl4dw [options] [polytope-name]
+```
+
+If `polytope-name` is omitted, the viewer opens `c8`. The name is resolved
+against the configured data directory without an extension, so `c8` loads
+`data/c8.poi`.
+
+Options:
+
+- `-h` - draw facets as hollow frames.
+- `-s` - draw facets as solid surfaces. This is the default.
+- `-c` - enable the extra clipping plane.
+- `-n <title>` - set the GLUT window title.
+
+Examples:
+
+```bash
+./build-viewer/gl4dw c24
+./build-viewer/gl4dw -h c8
+./build-viewer/gl4dw -c -n "gl4dw c8 clipped" c8
+```
+
 ## Configuration
 
 Optional viewer settings can be stored in `gl4d.json` in the project root. See
