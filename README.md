@@ -1,7 +1,7 @@
 # gl4dw
 
 `gl4dw` is a legacy OpenGL viewer for 4D polytopes. The original code and
-polytope data have been refreshed enough to build with CMake on Windows and
+polytope data have been refreshed enough to build with CMake on Windows, MacOS and
 Linux/WSL while preserving the small, direct structure of the old program.
 
 The viewer loads polytope data from `data/`, projects it into 3D, and displays
