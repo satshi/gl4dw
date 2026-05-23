@@ -66,6 +66,29 @@ If you use vcpkg manually, pass its toolchain file when configuring:
 cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake
 ```
 
+Create a ZIP package after building Release:
+
+```bat
+cmake --build build --config Release --target package
+```
+
+The package is written under the build directory and contains `gl4dw.exe`,
+`data_json/`, `config/`, `docs/`, `README.md`, and `LICENSE`.
+
+See `docs/windows_binary_distribution.md` for the release checklist and
+`docs/windows_quick_start.md` for a short guide to include with Windows binary
+packages. Third party license notes are tracked in
+`docs/third_party_notices.md`.
+
+If `freeglut.dll` is not copied automatically by your vcpkg/CMake setup, pass
+it explicitly when configuring:
+
+```bat
+cmake -S . -B build ^
+  -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake ^
+  -DGL4DW_PACKAGE_EXTRA_DLLS=%VCPKG_ROOT%\installed\x64-windows\bin\freeglut.dll
+```
+
 ## Building on Linux/WSL
 
 Build the core library and tests without the OpenGL viewer:
@@ -107,9 +130,14 @@ commands. Without Ninja, CMake's default macOS generator works.
 
 ## Manual Install
 
-There is no CMake install target. To keep installation simple and user-local,
-copy the viewer executable and bundled data into a directory under your home
-directory.
+You can install the viewer executable and bundled data into a local directory
+with CMake:
+
+```bat
+cmake --install build --config Release --prefix "%USERPROFILE%\gl4dw"
+```
+
+You can also copy the files manually.
 
 Windows example:
 
@@ -118,6 +146,8 @@ mkdir "%USERPROFILE%\gl4dw"
 copy build\Release\gl4dw.exe "%USERPROFILE%\gl4dw\"
 xcopy data_json "%USERPROFILE%\gl4dw\data_json\" /E /I
 xcopy config "%USERPROFILE%\gl4dw\config\" /E /I
+copy README.md "%USERPROFILE%\gl4dw\"
+copy LICENSE "%USERPROFILE%\gl4dw\"
 ```
 
 For single-configuration generators, the executable may be `build\gl4dw.exe`
