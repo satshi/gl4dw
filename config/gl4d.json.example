@@ -1,5 +1,5 @@
 {
-  "dataDir": "data",
+  "dataDir": "data_json",
   "width": 640,
   "extendRate": 0.06,
   "clip": false,

@@ -36,6 +36,7 @@ target_include_directories(gl4dw_core
   PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
+target_link_libraries(gl4dw_core PUBLIC nlohmann_json::nlohmann_json)
 
 if(MSVC)
   target_compile_definitions(gl4dw_core PRIVATE _CRT_SECURE_NO_WARNINGS)
@@ -73,6 +74,15 @@ if(GL4DW_BUILD_SMOKE_TEST)
   if(BUILD_TESTING)
     add_test(NAME gl4dw_data_validation COMMAND gl4dw_data_validation)
     set_tests_properties(gl4dw_data_validation PROPERTIES
+      WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+    )
+  endif()
+
+  add_executable(gl4dw_json_data_validation tests/json_data_validation.cpp)
+  target_link_libraries(gl4dw_json_data_validation PRIVATE gl4dw_core)
+  if(BUILD_TESTING)
+    add_test(NAME gl4dw_json_data_validation COMMAND gl4dw_json_data_validation)
+    set_tests_properties(gl4dw_json_data_validation PROPERTIES
       WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
     )
   endif()
