@@ -5,8 +5,7 @@ polytope data have been refreshed enough to build with CMake on Windows, MacOS a
 Linux/WSL while preserving the small, direct structure of the old program.
 
 The viewer loads polytope data from JSON files in `data_json/`, projects it into
-3D, and displays it with GLUT/OpenGL. The legacy `data/` files are kept as a
-fallback format. The repository also includes smoke tests and data
+3D, and displays it with GLUT/OpenGL. The repository also includes smoke tests and data
 validation tests that can run without opening a viewer window.
 
 ![gl4dw displaying a 4D polytope](assets/screenshot.png)
@@ -18,7 +17,6 @@ validation tests that can run without opening a viewer window.
 - `include/` - project headers and compatibility wrappers
 - `tests/` - smoke tests and data validation tests
 - `data_json/` - bundled JSON polytope datasets
-- `data/` - legacy bundled polytope datasets
 - `config/` - example viewer configuration
 
 ## Requirements
@@ -118,7 +116,6 @@ Windows example:
 ```bat
 mkdir "%USERPROFILE%\gl4dw"
 copy build\Release\gl4dw.exe "%USERPROFILE%\gl4dw\"
-xcopy data "%USERPROFILE%\gl4dw\data\" /E /I
 xcopy data_json "%USERPROFILE%\gl4dw\data_json\" /E /I
 xcopy config "%USERPROFILE%\gl4dw\config\" /E /I
 ```
@@ -135,7 +132,6 @@ Linux/WSL example:
 ```bash
 mkdir -p "$HOME/gl4dw"
 cp ./build-viewer/gl4dw "$HOME/gl4dw/"
-cp -R data "$HOME/gl4dw/"
 cp -R data_json "$HOME/gl4dw/"
 cp -R config "$HOME/gl4dw/"
 ```
@@ -182,10 +178,8 @@ not require OpenGL or GLUT.
 
 ## Running the Viewer
 
-The default polytope name is `c8`. By default, the loader first looks for JSON
-data such as `data_json/c8.json`; if no JSON file exists, it falls back to the
-legacy `data/c8.poi` and `.cel` files. You can also pass a polytope name on the
-command line.
+The default polytope name is `c8`. The loader reads JSON data such as
+`data_json/c8.json`. You can also pass a polytope name on the command line.
 
 Windows:
 
@@ -225,9 +219,8 @@ gl4dw [options] [polytope-name]
 ```
 
 If `polytope-name` is omitted, the viewer opens `c8`. The name is resolved
-against JSON data first, so `c8` loads `data_json/c8.json` when the default
-layout is present. The legacy `data/c8.poi` path is used only when JSON data is
-not found.
+against the configured JSON data directory without an extension, so `c8` loads
+`data_json/c8.json` when the default layout is present.
 
 Options:
 

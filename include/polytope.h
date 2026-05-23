@@ -38,14 +38,6 @@ class polytope
 	polytope& operator=(const polytope&) = delete;
 	virtual ~polytope();
 
-	//===================		 入力関数
-	BOOL read_vertices(istream& is);
-	BOOL read_Facet_normals(istream& is);
-	BOOL read_faces(istream& is);
-	BOOL read_Facets(istream& is);
-	
-	void load_base(char*);
-
 	//========================	   要素を生成する関数
 	BOOL make__Facets();
 	BOOL make__Facets_to_faces();
@@ -71,36 +63,6 @@ inline polytope::polytope()
 {
 	name=NULL;
 }
-
-//===================		 入力関数
-inline BOOL polytope::read_vertices(istream& is)
-{
-	vertices.reset(new points());
-	is>>(*vertices);
-	return TRUE;
-}
-
-inline BOOL polytope::read_Facet_normals(istream& is)
-{
-	Facet_normals.reset(new points());
-	is>>(*Facet_normals);
-	return TRUE;
-}
-
-inline BOOL polytope::read_faces(istream& is)
-{
-	faces.reset(new cells());
-	is>>(*faces);
-	return TRUE;
-}
-
-inline BOOL polytope::read_Facets(istream& is)
-{
-	Facets.reset(new cells());
-	is>>(*Facets);
-	return TRUE;
-}
-
 
 //========================	   要素を生成する関数
 inline BOOL polytope::make__Facets()

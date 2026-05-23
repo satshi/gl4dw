@@ -2,16 +2,11 @@
  *	多胞体クラスの関数
  * ---------------------------------------------------------------------- */
 #include "polytope.h"
-#include "dirutil.h"
-#include <fstream>
 #include <stdlib.h>
 #include <stdio.h>
-#include <algorithm>
-#include <string>
 
 using std::cerr;
 using std::endl;
-using std::ifstream;
 
 #define NONSENSE_INDEX (-1)
 #define message(A)
@@ -418,93 +413,3 @@ BOOL polytope::make_edges_from_Facets_and_faces()
 	return TRUE;
 }
 
-/* -------------------------------------------------------------------------
- *	頂点のデータなどの主なデータを読み込む
- * ---------------------------------------------------------------------- */
-void polytope::load_base(char* fname)
-{
-	std::string dir;
-	int i;
-	ifstream is(fname);
-
-	if (!is)
-	{
-		return;
-	}
-	else
-	{
-		//頂点のデータをファイルから読み込む。
-		//頂点のオブジェクトを作り直す。
-		vertices.reset(new points);
-		vertices->read(is);
-		//頂点のフラグを生成する。
-		flag_vertices.reset(new flag(vertices->n));
-
-		//ベクトルの長さを調整する。
-		double l=0;
-		for(i=0;i<vertices->n;i++)
-			l=std::max(l,(*vertices)[i].norm());
-		l=(*vertices)[0].norm();
-		for(i=0;i<vertices->n;i++)
-			(*vertices)[i]*=(1.0/l);
-		vertices->edgelength *=(1.0/l);
-		//タイトル、データのディレクトリーなどを設定する。
-		static std::string loaded_name;
-		loaded_name=filename(fname);
-		name=(char*)loaded_name.c_str();
-		dir=Directory(fname);
-//		Parent->SetDocTitle(title,0);
-
-		//前の多胞体のデータが残っていれば消す。
-		faces.reset();
-		edges.reset();
-		Facets.reset();
-		flag_Facets.reset();
-		flag_edges.reset();
-		flag_faces.reset();
-//		delete fcenter; fcenter=NULL;
-		Facet_normals.reset();
-		Facets_to_edges.reset();
-		Facets_to_faces.reset();
-
-		//面のデータを読み込む。
-		//ファイルネームは頂点のデータの頭にfをつけて
-		//拡張子をcelにしたもの
-		std::string tmp_name=dir + "\\f" + name + ".cel";
-		ifstream is2(tmp_name.c_str());
-		if (!is)
-		{
-			return;
-		}
-
-		read_faces(is2);
-		if(faces)
-		{
-			flag_faces.reset(new flag(faces->n));
-		}
-
-		//胞の中心のデータを読み込む。
-		//ファイルネームは頂点のデータから読み込む。
-		std::string ccfile;
-		is>>ccfile;
-		tmp_name=dir + "\\" + ccfile;
-		is.close();
-		is.open(tmp_name.c_str());
-		read_Facet_normals(is);
-		if(Facet_normals)
-		{
-			flag_Facets.reset(new flag(Facet_normals->n));
-		}
-		//胞のデータを読み込む。
-		//ファイルネームは頂点のデータの頭にcをつけて
-		//拡張子をcelにしたもの
-		//もしファイルがなければ何もしない。
-		tmp_name=dir + "\\c" + name + ".cel";
-		ifstream is(tmp_name.c_str());
-		if(is)
-		{
-			Facets.reset(new cells());
-			is>>*Facets;
-		}
-	}
-}
