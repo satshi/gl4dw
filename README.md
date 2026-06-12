@@ -128,6 +128,17 @@ ctest --test-dir build-viewer-mac --output-on-failure
 If you prefer Ninja and have it installed, add `-G Ninja` to the configure
 commands. Without Ninja, CMake's default macOS generator works.
 
+Create a ZIP package after building the viewer:
+
+```bash
+cmake --build build-viewer-mac --target package
+```
+
+The package is written under the build directory and contains `gl4dw`,
+`data_json/`, `config/`, `docs/`, `README.md`, and `LICENSE`.
+
+See `docs/macos_binary_distribution.md` for the macOS release checklist.
+
 ## Manual Install
 
 You can install the viewer executable and bundled data into a local directory
@@ -169,6 +180,14 @@ cp -R config "$HOME/gl4dw/"
 Run the installed copy from that directory so the default `data` path resolves:
 
 ```bash
+cd "$HOME/gl4dw"
+./gl4dw c8
+```
+
+macOS example:
+
+```bash
+cmake --install build-viewer-mac --prefix "$HOME/gl4dw"
 cd "$HOME/gl4dw"
 ./gl4dw c8
 ```
